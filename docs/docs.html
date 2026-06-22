@@ -1,0 +1,1339 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="styles\style_docs.css">
+    <meta charset="UTF-8">
+    <title>Zerionyx Documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<script src="script.js"></script>
+
+<body>
+    <header>
+        <div class="header-inner">
+            <div class="logo">
+                <img src="favicon.ico" alt="Zerionyx logo">
+                <a href="index.html">Zeriony<span>x</span></a>
+            </div>
+            <button class="nav-toggle" aria-label="Toggle navigation">☰</button>
+            <nav>
+                <a href="index.html">Home</a>
+                <a href="https://github.com/memeviber/Zerionyx" target="_blank">GitHub</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="docs-wrapper">
+        <aside class="sidebar">
+            <h3>Language</h3>
+            <ul>
+                <li><a href="#getting-started">Getting Started</a></li>
+                <li><a href="#grammar">Grammar</a></li>
+                <li><a href="#zen-of-zerionyx">Zen of Zerionyx</a></li>
+            </ul>
+            <h3>Language Reference</h3>
+            <ul>
+                <li><a href="#ref-data-types">Data Types</a></li>
+                <li><a href="#ref-built-in-constants">Built-in Constants</a></li>
+                <li><a href="#ref-built-in-functions">Built-in Functions</a></li>
+                <li><a href="#ref-namespaces">Namespaces</a></li>
+                <li><a href="#ref-control-flow">Control Flow</a></li>
+                <li><a href="#ref-loops">Loops</a></li>
+                <li><a href="#ref-functions">Functions</a></li>
+                <li><a href="#ref-decorators">Decorators</a></li>
+                <li><a href="#ref-using">Using Statements</a></li>
+                <li><a href="#ref-vargs-kwargs">Vargs and Kwargs</a></li>
+                <li><a href="#ref-io">Input/Output</a></li>
+                <li><a href="#ref-error-handling">Error Handling</a></li>
+                <li><a href="#ref-file-handling">File Handling</a></li>
+                <li><a href="#ref-strings">Strings</a></li>
+                <li><a href="#ref-lists">Lists</a></li>
+                <li><a href="#ref-hashmaps">HashMaps</a></li>
+                <li><a href="#ref-assignment">Assignment</a></li>
+                <li><a href="#ref-bytes">Bytes</a></li>
+                <li><a href="#ref-cfloat">CFloat</a></li>
+                <li><a href="#ref-zex">ZEX Executables</a></li>
+            </ul>
+            <h3>Standard Library</h3>
+            <ul>
+                <li><a href="#lib-listm">listm</a></li>
+                <li><a href="#lib-string">string</a></li>
+                <li><a href="#lib-math">math</a></li>
+                <li><a href="#lib-ffio">ffio</a></li>
+                <li><a href="#lib-hash">hash</a></li>
+                <li><a href="#lib-memory">memory</a></li>
+                <li><a href="#lib-net">net</a></li>
+                <li><a href="#lib-random">random</a></li>
+                <li><a href="#lib-sys">sys</a></li>
+                <li><a href="#lib-threading">threading</a></li>
+                <li><a href="#lib-time">time</a></li>
+                <li><a href="#lib-keyboard">keyboard</a></li>
+                <li><a href="#lib-termcolor">termcolor</a></li>
+                <li><a href="#lib-mouse">mouse</a></li>
+                <li><a href="#lib-screen">screen</a></li>
+                <li><a href="#lib-json">json</a></li>
+                <li><a href="#lib-decorators">decorators</a></li>
+                <li><a href="#lib-channel">channel</a></li>
+                <li><a href="#lib-msgbox">msgbox</a></li>
+                <li><a href="#lib-csv">csv</a></li>
+            </ul>
+
+        </aside>
+
+        <main class="main-content">
+            <h1>Zerionyx Documentation</h1>
+
+            <section id="getting-started">
+                <h2>Getting Started</h2>
+                <ul>
+                    <li><b>Install Zerionyx</b>: <code>git clone https://github.com/memeviber/Zerionyx</code>
+                    </li>
+                    <li><b>Run a file</b>: <code>python zerionyx.py yourfile.zyx</code></li>
+                    <li><b>Open interactive shell</b>: <code>python zerionyx.py</code></li>
+                    <li>See the <a href="https://github.com/memeviber/Zerionyx"
+                            style="color:var(--neon-blue);">github repository</a> for more info</li>
+                </ul>
+            </section>
+
+            <section id="grammar">
+                <h2>Language Grammar</h2>
+                <pre><code class="highlight-Zerionyx">PROGRAM ::= STATEMENTS
+
+STATEMENTS ::= STATEMENT (NEWLINE+ STATEMENT)* NEWLINE*
+
+STATEMENT ::= SIMPLE_STATEMENT | COMPOUND_STATEMENT
+
+SIMPLE_STATEMENT ::=
+    <span class="zyx-string">load</span> STRING
+  | <span class="zyx-string">return</span> [EXPR]
+  | <span class="zyx-string">continue</span>
+  | <span class="zyx-string">break</span>
+  | <span class="zyx-string">using</span> [<span class="zyx-string">parent</span>] IDENTIFIER (<span class="zyx-string">,</span> IDENTIFIER)*
+  | <span class="zyx-string">del</span> IDENTIFIER (<span class="zyx-string">,</span> IDENTIFIER)*
+  | EXPR
+
+COMPOUND_STATEMENT ::=
+    IF_EXPR
+  | FOR_EXPR
+  | WHILE_EXPR
+  | NAMESPACE_EXPR
+  | (DECORATOR+ DEF_FUNC)
+  | DEF_FUNC
+
+BODY ::= STATEMENT | (NEWLINE STATEMENTS <span class="zyx-string">done</span>)
+
+EXPR ::= ASSIGNMENT_EXPR
+
+ASSIGNMENT_EXPR ::=
+   (IDENTIFIER AUG_ASSIGN_OP EXPR)
+  | LOGIC_EXPR
+
+AUG_ASSIGN_OP ::= <span class="zyx-string">+=</span> | <span class="zyx-string">-=</span> | <span class="zyx-string">*=</span> | <span class="zyx-string">/=</span> | <span class="zyx-string">//=</span> | <span class="zyx-string">%=</span> | <span class="zyx-string">^=</span>
+
+LOGIC_EXPR ::= COMP_EXPR ((<span class="zyx-string">and</span> | <span class="zyx-string">or</span>) COMP_EXPR)*
+
+COMP_EXPR ::=
+    <span class="zyx-string">not</span> COMP_EXPR
+  | ARITH_EXPR ((<span class="zyx-string">==</span> | <span class="zyx-string">!=</span> | <span class="zyx-string"><</span> | <span class="zyx-string">></span> | <span class="zyx-string"><=</span> | <span class="zyx-string">>=</span>) ARITH_EXPR)*
+
+ARITH_EXPR ::= TERM ((<span class="zyx-string">+</span> | <span class="zyx-string">-</span>) TERM)*
+
+TERM ::= FACTOR ((<span class="zyx-string">*</span> | <span class="zyx-string">/</span> | <span class="zyx-string">//</span> | <span class="zyx-string">%</span>) FACTOR)*
+
+FACTOR ::=
+    <span class="zyx-string">+</span> FACTOR
+  | <span class="zyx-string">*</span> FACTOR                      (* vargs unpacking *)
+  | <span class="zyx-string">**</span> FACTOR                     (* kargs unpacking *)
+  | DOLLAR_EXPR
+
+DOLLAR_EXPR ::= POWER (<span class="zyx-string">$</span> POWER)*  (* $ is for indexing instead of [] *)
+
+POWER ::= CALL (<span class="zyx-string">^</span> FACTOR)*        (* power operator *)
+
+CALL ::= ATOM ( (<span class="zyx-string">.</span> IDENTIFIER) | (<span class="zyx-string">(</span> [ARG_LIST] <span class="zyx-string">)</span>) )*
+
+ARG_LIST ::= ARG (<span class="zyx-string">,</span> ARG)*
+
+ARG ::= EXPR | (IDENTIFIER <span class="zyx-string">=</span> EXPR)
+
+ATOM ::=
+    INT | FLOAT | STRING | IDENTIFIER
+  | <span class="zyx-string">(</span> EXPR <span class="zyx-string">)</span>
+  | LIST_EXPR
+  | HASHMAP_EXPR
+  | IF_EXPR
+  | FOR_EXPR
+  | WHILE_EXPR
+  | DEF_FUNC
+  | NAMESPACE_EXPR
+
+LIST_EXPR ::= <span class="zyx-string">[</span> [EXPR (<span class="zyx-string">,</span> EXPR)*] <span class="zyx-string">]</span>
+
+HASHMAP_EXPR ::= <span class="zyx-string">{</span> [EXPR <span class="zyx-string">:</span> EXPR (<span class="zyx-string">,</span> EXPR <span class="zyx-string">:</span> EXPR)*] <span class="zyx-string">}</span>
+
+NAMESPACE_EXPR ::= <span class="zyx-string">namespace</span> IDENTIFIER NEWLINE STATEMENTS <span class="zyx-string">done</span>
+
+IF_EXPR ::=
+    <span class="zyx-string">if</span> EXPR <span class="zyx-string">do</span> BODY
+    (<span class="zyx-string">elif</span> EXPR <span class="zyx-string">do</span> BODY)*
+    [<span class="zyx-string">else</span> <span class="zyx-string">do</span> BODY]?
+
+FOR_EXPR ::=
+    (<span class="zyx-string">for</span> FOR_IN_CLAUSE | FOR_RANGE_CLAUSES) <span class="zyx-string">do</span> BODY
+
+FOR_IN_CLAUSE ::= IDENTIFIER (<span class="zyx-string">,</span> IDENTIFIER)* <span class="zyx-string">in</span> EXPR
+
+FOR_RANGE_CLAUSES ::= FOR_RANGE_CLAUSE (<span class="zyx-string">,</span> FOR_RANGE_CLAUSE)*
+
+FOR_RANGE_CLAUSE ::= IDENTIFIER [<span class="zyx-string">=</span> EXPR] <span class="zyx-string">to</span> EXPR [<span class="zyx-string">step</span> EXPR]?
+
+WHILE_EXPR ::= <span class="zyx-string">while</span> EXPR <span class="zyx-string">do</span> BODY
+
+DECORATOR ::= <span class="zyx-string">&</span> EXPR NEWLINE*
+
+DEF_FUNC ::=
+    <span class="zyx-string">defun</span> [IDENTIFIER] <span class="zyx-string">(</span> [PARAM_LIST] <span class="zyx-string">)</span> (<span class="zyx-string">-></span> EXPR | (NEWLINE STATEMENTS <span class="zyx-string">done</span>))
+
+PARAM_LIST ::= (PARAMS [<span class="zyx-string">,</span> VAR_PARAMS]) | VAR_PARAMS
+
+PARAMS ::= PARAM (<span class="zyx-string">,</span> PARAM)*
+
+PARAM ::= IDENTIFIER [<span class="zyx-string">=</span> EXPR]
+
+VAR_PARAMS ::= (VARARGS_PARAM [<span class="zyx-string">,</span> KWARGS_PARAM]) | KWARGS_PARAM
+
+VARARGS_PARAM ::= <span class="zyx-string">*</span> IDENTIFIER
+
+KWARGS_PARAM ::= <span class="zyx-string">**</span> IDENTIFIER
+</code></pre>
+            </section>
+
+            <section id="zen-of-zerionyx">
+                <h2>The Zen of Zerionyx</h2>
+                <pre><code class="highlight-Zerionyx">The Zen of Zerionyx, by MemeViber.
+
+Clarity is better than cleverness.
+Consistency is better than chaos.
+Freedom in syntax, but not in structure.
+Parentheses are for math, backslashes are for flow.
+The caret (<span class="zyx-string">^</span>) means power &mdash; and nothing else.
+Blocks should be explicit: <span class="zyx-string">done</span> says it all.
+<span class="zyx-string">if</span> is a command, not a value.
+Whitespace is free; newlines are not.
+Write like a poet, execute like a machine.
+Code is for humans first, machines second.
+<span class="zyx-string">load</span> means <span class="zyx-string">include</span> &mdash; not magic.
+Indentation is rhythm, not restriction.
+When in doubt, don&rsquo;t guess &mdash; define it.
+Simplicity comes first.
+If it&rsquo;s hard to explain, it&rsquo;s probably wrong.
+If it&rsquo;s easy to explain, it might be right.
+Weirdness is not a feature.
+Zerionyx may be magical, but its syntax must be real.
+</code></pre>
+            </section>
+
+            <section id="language-reference">
+                <h2>Language Reference</h2>
+
+                <section id="ref-data-types">
+                    <h3>Data Types</h3>
+                    <p>Zerionyx is dynamically typed. Here are the primary data types:</p>
+                    <ul>
+                        <li><b>Number</b>: Can be an integer (e.g., <code>10</code>, <code>-5</code>) or a float (e.g.,
+                            <code>3.14</code>)
+                        </li>
+                        <li><b>String</b>: A sequence of characters, enclosed in double quotes (e.g.,
+                            <code>"hello"</code>)
+                        </li>
+                        <li><b>Bool</b>: Represents boolean values, either <code>true</code> or <code>false</code></li>
+                        <li><b>List</b>: An ordered collection of items, similar to an array (e.g.,
+                            <code>[1, "two", true]</code>)
+                        </li>
+                        <li><b>HashMap</b>: A collection of key-value pairs (e.g.,
+                            <code>{"name": "Zyx", "version": 1}</code>), keys must be strings
+                        </li>
+                        <li><b>Bytes</b>: A sequence of raw bytes, useful for binary data and hashing</li>
+                        <li><b>CFloat</b>: A "correct float" type that uses high-precision decimals to avoid common
+                            floating-point errors</li>
+                        <li><b>None</b>: A special type representing the absence of a value, written as
+                            <code>none</code>
+                        </li>
+                    </ul>
+                    <div class="note"
+                        style="border-left: 5px solid #ffcc00; padding: 10px; background: rgba(255, 204, 0, 0.1); margin: 20px 0;">
+                        <strong>⚠️ Important Note on Type Conversion:</strong>
+                        Many built-in and library functions that specifically require an <b>int</b> will automatically
+                        convert <b>float</b> arguments using the <code>to_int()</code> function.
+                        Since <code>to_int()</code> truncates towards zero (identical to Python's <code>int()</code>),
+                        ensure your values are pre-rounded if precision is critical.
+                    </div>
+                </section>
+
+                <section id="ref-built-in-constants">
+                    <h3>Built-in Constants</h3>
+                    <p>Zerionyx provides several global constants for convenience.</p>
+                    <h4>Core Values</h4>
+                    <ul>
+
+                        <li><b>true</b> &mdash; The boolean value for truth</li>
+                        <li><b>false</b> &mdash; The boolean value for falsehood</li>
+                        <li><b>none</b> &mdash; Represents the absence of a value</li>
+                        <li><b>is_main</b> &mdash; Check if the current file is the one being executed</li>
+                    </ul>
+                    <h4>Type Representations (Strings)</h4>
+                    <p>These constants are string values that correspond to the output of the <code>type()</code>
+                        function. They are useful for type checking.</p>
+                    <br>
+                    <pre><code class="highlight-Zerionyx"><span class="zyx-keyword">if</span> <span class="zyx-func">type</span><span class="zyx-types">([</span><span class="zyx-number">1</span><span class="zyx-types">,</span> <span class="zyx-number">2</span><span class="zyx-types">])</span> <span class="zyx-types">==</span> <span class="zyx-var">list</span> <span class="zyx-keyword">do</span>
+    <span class="zyx-func">println</span><span class="zyx-types">(</span><span class="zyx-string">"It's a list!"</span><span class="zyx-types">)</span>
+<span class="zyx-keyword">done</span></code></pre>
+                    <br>
+                    <ul>
+                        <li><b>list</b> &rarr; <code>"&lt;list&gt;"</code></li>
+                        <li><b>str</b> &rarr; <code>"&lt;str&gt;"</code></li>
+                        <li><b>int</b> &rarr; <code>"&lt;int&gt;"</code></li>
+                        <li><b>float</b> &rarr; <code>"&lt;float&gt;"</code></li>
+                        <li><b>bool</b> &rarr; <code>"&lt;bool&gt;"</code></li>
+                        <li><b>func</b> &rarr; <code>"&lt;func&gt;"</code></li>
+                        <li><b>hashmap</b> &rarr; <code>"&lt;hashmap&gt;"</code></li>
+                        <li><b>thread</b> &rarr; <code>"&lt;thread&gt;"</code></li>
+                        <li><b>bytes</b> &rarr; <code>"&lt;bytes&gt;"</code></li>
+                        <li><b>cfloat</b> &rarr; <code>"&lt;cfloat&gt;"</code></li>
+                        <li><b>py_obj</b> &rarr; <code>"&lt;py-obj&gt;"</code></li>
+                        <li><b>namespace</b> &rarr; <code>"&lt;namespace&gt;"</code></li>
+                        <li><b>channel_type</b> &rarr; <code>"&lt;channel&gt;"</code></li>
+                        <li><b>none_type</b> &rarr; <code>"&lt;none&gt;"</code></li>
+                        <li><b>thread_pool_type</b> &rarr; <code>"&lt;thread-pool&gt;"</code></li>
+                        <li><b>future_type</b> &rarr; <code>"&lt;future&gt;"</code></li>
+                    </ul>
+                    <h4>Special Numeric Values</h4>
+                    <ul>
+                        <li><b>nan</b> &mdash; Not a Number</li>
+                        <li><b>inf</b> &mdash; Positive infinity</li>
+                        <li><b>neg_inf</b> &mdash; Negative infinity</li>
+                    </ul>
+                </section>
+
+                <section id="ref-built-in-functions">
+                    <h3>Built-in Functions</h3>
+                    <ul>
+                        <li><b>append(obj, val)</b> &rarr; list &mdash; Add <code>val</code> to end of <code>obj</code>
+                            return
+                            <code>val</code>
+                        </li>
+                        <li><b>is_panic(func, args=[], kwargs={})</b> &rarr; list &mdash; Run <code>func</code> with
+                            <code>args</code>
+                            return
+                            <code>[result, none, none]</code> if ok or
+                            <code>[none, err_msg, err_name ("RT": "Runtime Error", "M": "Math Error", "IO": "IO Error" or "T": "Type Error")]</code>
+                            if error
+                        </li>
+                        <li><b>clear()</b> &rarr; none &mdash; Clear terminal</li>
+                        <li><b>extend(a, b)</b> &rarr; none &mdash; Add all in <code>b</code> to <code>a</code> both
+                            must be
+                            list</li>
+                        <li><b>input(prompt="")</b> &rarr; str &mdash; Show <code>prompt</code> get user input</li>
+                        <li><b>get_password(prompt="")</b> &rarr; str &mdash; Show <code>prompt</code> get user password
+                        </li>
+                        <li><b>insert(lst, i, val)</b> &rarr; none &mdash; insert <code>val</code> to <code>lst</code>
+                            at
+                            index
+                            <code>i</code>
+                        </li>
+                        <li><b>is_func(x)</b> &rarr; bool &mdash; Check if <code>x</code> is func</li>
+                        <li><b>is_list(x)</b> &rarr; bool &mdash; Check if <code>x</code> is list</li>
+                        <li><b>is_py_obj(x)</b> &rarr; bool &mdash; Check if <code>x</code> is PyObject</li>
+                        <li><b>is_none(x)</b> &rarr; bool &mdash; Check if <code>x</code> is none</li>
+                        <li><b>is_num(x)</b> &rarr; bool &mdash; Check if <code>x</code> is number</li>
+                        <li><b>is_str(x)</b> &rarr; bool &mdash; Check if <code>x</code> is string</li>
+                        <li><b>is_bool(x)</b> &rarr; bool &mdash; Check if <code>x</code> is boolean</li>
+                        <li><b>is_thread(x)</b> &rarr; bool &mdash; Check if <code>x</code> is thread</li>
+                        <li><b>is_thread_pool(x)</b> &rarr; bool &mdash; Check if <code>x</code> is thread pool</li>
+                        <li><b>is_future(x)</b> &rarr; bool &mdash; Check if <code>x</code> is future</li>
+                        <li><b>is_namespace(x)</b> &rarr; bool &mdash; Check if <code>x</code> is namespace</li>
+                        <li><b>keys(hm)</b> &rarr; list &mdash; Return list of all keys in <code>hm</code> (a hashmap)
+                        </li>
+                        <li><b>values(hm)</b> &rarr; list &mdash; Return list of all values in <code>hm</code></li>
+                        <li><b>items(hm)</b> &rarr; list &mdash; Return list of <code>[key, value]</code> pairs in
+                            <code>hm</code>
+                        </li>
+                        <li><b>has(hm, key)</b> &rarr; bool &mdash; Return <code>true</code> if <code>key</code> exists
+                            in
+                            <code>hm</code>
+                        </li>
+                        <li><b>get(hmol, koi, default=none)</b> &rarr; any &mdash; Return value for <code>koi</code> or
+                            <code>default</code>
+                            if not found
+                        </li>
+                        <li><b>del_key(hm, key)</b> &rarr; none &mdash; Delete <code>key</code> and its value from
+                            <code>hm</code>
+                        </li>
+                        <li><b>len(x)</b> &rarr; number &mdash; Get length of <code>x</code></li>
+                        <li><b>panic(msg, type="RT")</b> &mdash; Stop with err <code>msg</code> and
+                            <code>type ("RT": "Runtime Error", "M": "Math Error", "IO": "IO Error" or "T": "Type Error")</code>
+                        </li>
+                        <li><b>pop(lst, i)</b> &rarr; any &mdash; Remove and return item at <code>i</code> in
+                            <code>lst</code>
+                        </li>
+                        <li><b>print(value="")</b> &rarr; none &mdash; Prints <code>text</code> to the standard output
+                            with
+                            no newline</li>
+                        <li><b>println(value="")</b> &rarr; none &mdash; Same as <code>print</code> but adds a newline
+                        </li>
+                        <li><b>to_float(x, supress_error=false)</b> &rarr; number (float)/none &mdash; Convert
+                            <code>x</code> to float return
+                            <code>none</code> if fail and <code>supress_error</code> true else raise
+                        </li>
+                        <li><b>to_int(x, supress_error=false)</b> &rarr; number (int)/none &mdash; Convert
+                            <code>x</code> to
+                            int return
+                            <code>none</code> if fail and <code>supress_error</code> true else raise
+                        </li>
+                        <li><b>to_str(x)</b> &rarr; str &mdash; Convert <code>x</code> to string</li>
+                        <li><b>to_cfloat(x, supress_error=false)</b> &rarr; cfloat &mdash; Convert
+                            <code>x</code> to cfloat (correct float) return
+                            <code>none</code> if fail and <code>supress_error</code> true else raise
+                        </li>
+                        <li><b>to_bytes(x, from_hex=false, supress_error=false)</b> &rarr; bytes &mdash; Convert
+                            <code>x</code>
+                            to bytes return
+                            <code>none</code> if fail and <code>supress_error</code> true else raise
+                        </li>
+                        </li>
+                        <li><b>type(x)</b> &rarr; str &mdash; Return type of <code>x</code> as string</li>
+                        <li><b>pyexec(code, env={})</b> &rarr; hashmap &mdash; Executes embedded Python code and
+                            returns
+                            its result (use with caution)</li>
+                        <li><b>slice(l, from=none, to=none, step=none)</b> &rarr; list/string/hashmap/bytes &mdash;
+                            Slice
+                            list/string/hashmap/bytes
+                            <code>l</code> from <code>from</code> to <code>to</code> step <code>step</code> (exclusive)
+                        </li>
+                        <li><b>is_nan(n)</b> &rarr; bool &mdash; Check if <code>n</code> is NaN (Not a Number)</li>
+                        <li><b>is_channel(n)</b> &rarr; bool &mdash; Check if <code>n</code> is channel</li>
+                        <li><b>is_cfloat(n)</b> &rarr; bool &mdash; Check if <code>n</code> is cfloat</li>
+                        <li><b>clone(value)</b> &rarr; any &mdash; Clone and return <code>value</code></li>
+                        <li><b>get_member(namespace, member, default=none)</b> &rarr; any &mdash; Gets a member from a
+                            <code>namespace</code>, returning <code>default</code> if it does not exist
+                        </li>
+                        <li><b>shl(a, b)</b> &rarr; number (int) &mdash; Bitwise left shift on integer <code>a</code> by
+                            <code>b</code> positions
+                        </li>
+                        <li><b>shr(a, b)</b> &rarr; number (int) &mdash; Bitwise right shift on integer <code>a</code>
+                            by <code>b</code> positions</li>
+                        <li><b>bitwise_and(a, b)</b> &rarr; number (int) &mdash; Performs a bitwise AND operation on
+                            integers <code>a</code> and <code>b</code></li>
+                        <li><b>bitwise_or(a, b)</b> &rarr; number (int) &mdash; Performs a bitwise OR operation on
+                            integers <code>a</code> and <code>b</code></li>
+                        <li><b>bitwise_xor(a, b)</b> &rarr; number (int) &mdash; Performs a bitwise XOR operation on
+                            integers <code>a</code> and <code>b</code></li>
+                        <li><b>bitwise_not(a)</b> &rarr; number (int) &mdash; Performs a bitwise NOT (inversion)
+                            operation on integer <code>a</code></li>
+                    </ul>
+                </section>
+                <section id="ref-namespaces">
+                    <h3>Namespaces</h3>
+                    <p>Namespaces are objects that serve as containers to group related variables and functions. They
+                        help organize code and prevent name conflicts, especially when building libraries.</p>
+                    <p>You can define a namespace using the <code>namespace ... done</code> block. Members inside the
+                        namespace are accessed using dot notation (<code>.</code>).</p>
+                    <br>
+                    <pre><code class="highlight-Zerionyx"><span class="zyx-comment"># Define a namespace to group math-related utilities</span>
+<span class="zyx-keyword">namespace</span> <span class="zyx-var">math_utils</span>
+    <span class="zyx-var">pi</span> <span class="zyx-types">=</span> <span class="zyx-number">3.14159</span>
+    
+    <span class="zyx-keyword">defun</span> <span class="zyx-func-def">circle_area</span><span class="zyx-types">(</span><span class="zyx-var">radius</span><span class="zyx-types">)</span>
+        <span class="zyx-keyword">return</span> <span class="zyx-var">pi</span> <span class="zyx-types">*</span> <span class="zyx-var">radius</span> <span class="zyx-types">^</span> <span class="zyx-number">2</span>
+    <span class="zyx-keyword">done</span>
+<span class="zyx-keyword">done</span>
+
+<span class="zyx-comment"># Access members using dot notation</span>
+<span class="zyx-var">r</span> <span class="zyx-types">=</span> <span class="zyx-number">10</span>
+<span class="zyx-var">area</span> <span class="zyx-types">=</span> <span class="zyx-var">math_utils</span><span class="zyx-types">.</span><span class="zyx-func">circle_area</span><span class="zyx-types">(</span><span class="zyx-var">r</span><span class="zyx-types">)</span>
+
+<span class="zyx-func">println</span><span class="zyx-types">(</span><span class="zyx-string">"The area is "</span> <span class="zyx-types">+</span> <span class="zyx-func">to_str</span><span class="zyx-types">(</span><span class="zyx-var">area</span><span class="zyx-types">))</span>
+<span class="zyx-func">println</span><span class="zyx-types">(</span><span class="zyx-string">"Pi value: "</span> <span class="zyx-types">+</span> <span class="zyx-func">to_str</span><span class="zyx-types">(</span><span class="zyx-var">math_utils</s<span class="zyxpan><span class="zyx-types">.</span><span class="zyx-var">pi</span><span class="zyx-types">))</span>
+</code></pre>
+                    <br>
+                    <div class="note"
+                        style="border-left: 5px solid var(--neon-blue); padding: 10px; background: rgba(0, 255, 204, 0.1); margin: 20px 0;">
+                        <strong>💡 Immutable Namespaces:</strong>
+                        All variables and functions declared inside a namespace are <b>immutable</b>.
+                        <ul>
+                            <li>Names can't be changed or reassigned once they are defined.</li>
+                            <li>Members are <b>read-only</b> &mdash; they can be accessed but not modified or
+                                overridden.</li>
+                        </ul>
+                        This ensures that namespaces remain consistent, safe, and protected from unintended side
+                        effects.
+                    </div>
+                </section>
+                <section id="ref-control-flow">
+                    <h3>Control Flow</h3>
+                    <p>Conditional logic is handled using <code>if</code>, <code>elif</code>, and <code>else</code>
+                        statements. Each block of code to be executed is introduced by the <code>do</code> keyword and
+                        the entire structure is terminated by <code>done</code>.</p>
+                    <br>
+                    <pre><code class="highlight-Zerionyx"><span class="zyx-var">score</span> <span class="zyx-types">=</span> <span class="zyx-number">85</span>
+
+<span class="zyx-keyword">if</span> <span class="zyx-var">score</span> <span class="zyx-types">>=</span> <span class="zyx-number">90</span> <span class="zyx-keyword">do</span>
+    <span class="zyx-func">println</span><span class="zyx-types">(</span><span class="zyx-string">"Grade: A"</span><span class="zyx-types">)</span>
+<span class="zyx-keyword">elif</span> <span class="zyx-var">score</span> <span class="zyx-types">>=</span> <span class="zyx-number">80</span> <span class="zyx-keyword">do</span>
+    <span class="zyx-func">println</span><span class="zyx-types">(</span><span class="zyx-string">"Grade: B"</span><span class="zyx-types">)</span>
+<span class="zyx-keyword">else</span> <span class="zyx-keyword">do</span>
+    <span class="zyx-func">println</span><span class="zyx-types">(</span><span class="zyx-string">"Grade: C or lower"</span><span class="zyx-types">)</span>
+<span class="zyx-keyword">done</span>
+</code></pre>
+                </section>
+
+                <section id="ref-loops">
+                    <h3>Loops</h3>
+                    <p>Zerionyx provides three types of loops.</p>
+                    <br>
+                    <h4>While Loop</h4>
+                    <p>Executes a code block if a condition is true.</p>
+                    <br>
+                    <pre><code class="highlight-Zerionyx"><span class="zyx-var">count</span> <span class="zyx-types">=</span> <span class="zyx-number">0</span>
+<span class="zyx-keyword">while</span> <span class="zyx-var">count</span> <span class="zyx-types">&lt;</span> <span class="zyx-number">5</span> <span class="zyx-keyword">do</span>
+    <span class="zyx-func">println</span><span class="zyx-types">(</span><span class="zyx-var">count</span><span class="zyx-types">)</span>
+    <span class="zyx-var">count</span> <span class="zyx-types">=</span> <span class="zyx-var">count</span> <span class="zyx-types">+</span> <span class="zyx-number">1</span>
+<span class="zyx-keyword">done</span>
+</code></pre>
+                    <br>
+                    <h4>For Loop (Numeric Range)</h4>
+                    <p>Iterates over a range of numbers.</p>
+                    <br>
+                    <pre><code class="highlight-Zerionyx"><span class="zyx-comment"># Prints numbers from 0 to 10</span>
+<span class="zyx-keyword">for</span> <span class="zyx-var">i</span> <span class="zyx-keyword">to</span> <span class="zyx-number">11</span> <span class="zyx-keyword">do</span>
+    <span class="zyx-func">println</span><span class="zyx-types">(</span><span class="zyx-var">i</span><span class="zyx-types">)</span>
+<span class="zyx-keyword">done</span>
+
+<span class="zyx-comment"># Prints numbers from 01 to 99</span>
+<span class="zyx-keyword">for</span> <span class="zyx-var">i</span> <span class="zyx-keyword">to</span> <span class="zyx-number">10</span><span class="zyx-types">,</span> <span class="zyx-var">j</span> <span class="zyx-types">=</span> <span class="zyx-number">1</span> <span class="zyx-keyword">to</span> <span class="zyx-number">10</span> <span class="zyx-keyword">do</span>
+    <span class="zyx-func">println</span><span class="zyx-types">(</span><span class="zyx-func">to_str</span><span class="zyx-types">(</span><span class="zyx-var">i</span><span class="zyx-types">)</span> <span class="zyx-types">+</span> <span class="zyx-func">to_str</span><span class="zyx-types">(</span><span class="zyx-var">j</span><span class="zyx-types">))</span>
+<span class="zyx-keyword">done</span>
+
+<span class="zyx-comment"># Prints even numbers from 2 to 10</span>
+<span class="zyx-keyword">for</span> <span class="zyx-var">j</span> <span class="zyx-types">=</span> <span class="zyx-number">2</span> <span class="zyx-keyword">to</span> <span class="zyx-number">11</span> <span class="zyx-keyword">step</span> <span class="zyx-number">2</span> <span class="zyx-keyword">do</span>
+    <span class="zyx-func">println</span><span class="zyx-types">(</span><span class="zyx-var">j</span><span class="zyx-types">)</span>
+<span class="zyx-keyword">done</span>
+
+</code></pre>
+                    <br>
+                    <h4>For-In Loop (Iterator)</h4>
+                    <p>Iterates over the elements of an iterable like a list or string.</p>
+                    <br>
+                    <pre><code class="highlight-Zerionyx"><span class="zyx-var">fruits</span> <span class="zyx-types">=</span> <span class="zyx-types">[</span><span class="zyx-string">"apple"</span><span class="zyx-types">,</span> <span class="zyx-string">"banana"</span><span class="zyx-types">,</span> <span class="zyx-string">"cherry"</span><span class="zyx-types">]</span>
+<span class="zyx-keyword">for</span> <span class="zyx-var">fruit</span> <span class="zyx-keyword">in</span> <span class="zyx-var">fruits</span> <span class="zyx-keyword">do</span>
+    <span class="zyx-func">println</span><span class="zyx-types">(</span><span class="zyx-string">"I like "</span> <span class="zyx-types">+</span> <span class="zyx-var">fruit</span><span class="zyx-types">)</span>
+<span class="zyx-keyword">done</span>
+</code></pre>
+                    <br>
+                    <p>The <code>break</code> statement can be used to exit a loop immediately, and
+                        <code>continue</code> skips to the next iteration.
+                    </p>
+                </section>
+
+                <section id="ref-functions">
+                    <h3>Functions</h3>
+                    <p>Functions are defined with the <code>defun</code> keyword. They can accept parameters and also
+                        support default values.</p>
+                    <br>
+                    <h4>Function</h4>
+                    <p>
+                        A function is a reusable block of code that can be called with arguments to perform
+                        specific operations.
+                    </p>
+                    <br>
+                    <pre><code class="highlight-Zerionyx"><span class="zyx-keyword">defun</span> <span class="zyx-func-def">greet</span><span class="zyx-types">(</span><span class="zyx-var">name</span><span class="zyx-types">=</span><span class="zyx-string">"World"</span><span class="zyx-types">)</span>
+    <span class="zyx-keyword">return</span> <span class="zyx-string">"Hello, "</span> <span class="zyx-types">+</span> <span class="zyx-func">to_str</span><span class="zyx-types">(</span><span class="zyx-var">name</span><span class="zyx-types">)</span> <span class="zyx-types">+</span> <span class="zyx-string">"!"</span>
+<span class="zyx-keyword">done</span>
+
+<span class="zyx-func">println</span><span class="zyx-types">(</span><span class="zyx-func">greet</span><span class="zyx-types">(</span><span class="zyx-string">"Zerionyx"</span><span class="zyx-types">))</span> <span class="zyx-comment"># Output: Hello, Zerionyx!</span>
+<span class="zyx-func">println</span><span class="zyx-types">(</span><span class="zyx-func">greet</span><span class="zyx-types">())</span>           <span class="zyx-comment"># Output: Hello, World!</span>
+</code></pre>
+                    <br>
+                    <h4>Anonymous and One-Line Functions</h4>
+                    <p>Functions can also be defined on a single line, and can be anonymous (without a name).</p>
+                    <br>
+                    <pre><code class="highlight-Zerionyx"><span class="zyx-comment"># One-line function</span>
+<span class="zyx-keyword">defun</span> <span class="zyx-func-def">sqrt</span><span class="zyx-types">(</span><span class="zyx-var">x</span><span class="zyx-types">)</span> <span class="zyx-types">-></span> <span class="zyx-var">x</span> <span class="zyx-types">^</span> <span class="zyx-number">0.5</span>
+
+<span class="zyx-comment"># Anonymous function assigned to a variable</span>
+<span class="zyx-var">a</span> <span class="zyx-types">=</span> <span class="zyx-keyword">defun</span> <span class="zyx-types">(</span><span class="zyx-var">x</span><span class="zyx-types">)</span> <span class="zyx-types">-></span> <span class="zyx-var">x</span> <span class="zyx-types">^</span> <span class="zyx-number">0.5</span>
+</code></pre>
+                </section>
+                <section id="ref-decorators">
+                    <h3>Decorators</h3>
+                    <p>Decorators modify or enhance functions using the <code>&</code> symbol before the function
+                        definition. A decorator is a function that takes another function and returns a new, modified
+                        function.</p>
+                    <br>
+                    <pre><code class="highlight-Zerionyx"><span class="zyx-keyword">load</span> <span class="zyx-string">"libs.decorators"</span>
+
+<span class="zyx-comment"># &decorators.once ensures this function only runs its body the first time it's called</span>
+<span class="zyx-keyword">&</span><span class="zyx-var">decorators</span><span class="zyx-types">.</span><span class="zyx-func">once</span>
+<span class="zyx-keyword">defun</span> <span class="zyx-func-def">initialize_settings</span><span class="zyx-types">()</span>
+    <span class="zyx-func">println</span><span class="zyx-types">(</span><span class="zyx-string">"Settings initialized"</span><span class="zyx-types">)</span>
+<span class="zyx-keyword">done</span>
+
+<span class="zyx-func">initialize_settings</span><span class="zyx-types">()</span> <span class="zyx-comment"># Output: Settings initialized</span>
+<span class="zyx-func">initialize_settings</span><span class="zyx-types">()</span> <span class="zyx-comment"># Does nothing</span>
+</code></pre>
+                </section>
+                <section id="ref-using">
+                    <h3>The <code>using</code> Statement: Accessing Global Scope</h3>
+                    <p>
+                        The <code>using</code> statement is used to explicitly bind a variable reference to the
+                        <strong>global scope</strong> rather than creating a new local variable. This allows a function
+                        to <strong>read from and modify</strong> a global variable directly.
+                    </p>
+                    <br>
+
+                    <h4><code>using <variable></code>: The <code>global</code> Analogy</h4>
+                    <p>
+                        When you need a function to modify a variable that exists in the global scope (or a specific
+                        top-level namespace), <code>using</code> creates a direct, writable link to that original
+                        variable. This brings the name into the local scope for easy access.
+                    </p>
+                    <br>
+                    <pre><code class="highlight-Zerionyx"><span class="zyx-var">is_running</span> <span class="zyx-types">=</span> <span class="zyx-var">true</span>
+
+<span class="zyx-keyword">defun</span> <span class="zyx-func-def">stop_application</span><span class="zyx-types">()</span>
+    <span class="zyx-keyword">using</span> <span class="zyx-var">is_running</span>
+    <span class="zyx-var">is_running</span> <span class="zyx-types">=</span> <span class="zyx-var">false</span>
+<span class="zyx-keyword">done</span>
+
+<span class="zyx-func">println</span><span class="zyx-types">(</span><span class="zyx-string">"App is running: "</span> <span class="zyx-types">+</span> <span class="zyx-func">to_str</span><span class="zyx-types">(</span><span class="zyx-var">is_running</span><span class="zyx-types">))</span> <span class="zyx-comment"># Output: App is running: true</span>
+
+<span class="zyx-func">stop_application</span><span class="zyx-types">()</span>
+
+<span class="zyx-func">println</span><span class="zyx-types">(</span><span class="zyx-string">"App is running: "</span> <span class="zyx-types">+</span> <span class="zyx-func">to_str</span><span class="zyx-types">(</span><span class="zyx-var">is_running</span><span class="zyx-types">))</span> <span class="zyx-comment"># Output: App is running: false</span>
+</code></pre>
+                    <br>
+                    <h4><code>using parent</code> Statement: The <code>nonlocal</code> Analogy</h3>
+                        <p>
+                            The <code>using parent</code> statement is used inside nested functions.
+                            It binds a variable reference to the <strong>immediate parent function&rsquo;s
+                                scope</strong>,
+                            similar to Python&rsquo;s <code>nonlocal</code> keyword.
+                        </p>
+                        <br>
+                        <pre><code class="highlight-Zerionyx"><span class="zyx-var">x</span> <span class="zyx-types">=</span> <span class="zyx-number">2</span> <span class="zyx-comment"># Global variable</span>
+
+<span class="zyx-keyword">defun</span> <span class="zyx-func-def">outer</span><span class="zyx-types">()</span>
+    <span class="zyx-var">x</span> <span class="zyx-types">=</span> <span class="zyx-number">0</span> <span class="zyx-comment"># Local variable, shadows the global 'x'</span>
+
+    <span class="zyx-keyword">defun</span> <span class="zyx-func-def">inner</span><span class="zyx-types">()</span>
+        <span class="zyx-keyword">using</span> <span class="zyx-keyword">parent</span> <span class="zyx-var">x</span>
+        <span class="zyx-var">x</span> <span class="zyx-types">+=</span> <span class="zyx-number">1</span>
+    <span class="zyx-keyword">done</span>
+
+    <span class="zyx-func">println</span><span class="zyx-types">(</span><span class="zyx-string">"outer's x before: "</span> <span class="zyx-types">+</span> <span class="zyx-func">to_str</span><span class="zyx-types">(</span><span class="zyx-var">x</span><span class="zyx-types">))</span> <span class="zyx-comment"># Output: outer's x before: 0</span>
+    <span class="zyx-func">inner</span><span class="zyx-types">()</span>
+    <span class="zyx-func">println</span><span class="zyx-types">(</span><span class="zyx-string">"outer's x after: "</span> <span class="zyx-types">+</span> <span class="zyx-func">to_str</span><span class="zyx-types">(</span><span class="zyx-var">x</span><span class="zyx-types">))</span> <span class="zyx-comment"># Output: outer's x after: 1</span>
+<span class="zyx-keyword">done</span>
+
+<span class="zyx-func">outer</span><span class="zyx-types">()</span>
+<span class="zyx-func">println</span><span class="zyx-types">(</span><span class="zyx-string">"global x: "</span> <span class="zyx-types">+</span> <span class="zyx-func">to_str</span><span class="zyx-types">(</span><span class="zyx-var">x</span><span class="zyx-types">))</span> <span class="zyx-comment"># Output: global x: 2</span>
+</code></pre>
+                </section>
+                <section id="ref-vargs-kwargs">
+                    <h3>Vargs and Kwargs</h3>
+                    <p>Zerionyx supports functions that can accept a variable number of arguments using special syntax
+                        in the parameter list.</p>
+                    <br>
+                    <h4>Vargs (<code>*args</code>)</h4>
+                    <p>A parameter prefixed with a single asterisk (<code>*</code>) will collect all extra positional
+                        arguments into a list. This is often called "vargs" or "star-args".</p>
+                    <br>
+                    <h4>Kwargs (<code>**kwargs</code>)</h4>
+                    <p>A parameter prefixed with a double asterisk (<code>**</code>) will collect all extra keyword
+                        arguments into a HashMap. This is commonly known as "kwargs".</p>
+                    <br>
+                    <pre><code class="highlight-Zerionyx"><span class="zyx-keyword">defun</span> <span class="zyx-func-def">show_details</span><span class="zyx-types">(</span><span class="zyx-var">name</span><span class="zyx-types">,</span> <span class="zyx-types">*</span><span class="zyx-var">scores</span><span class="zyx-types">,</span> <span class="zyx-types">**</span><span class="zyx-var">details</span><span class="zyx-types">)</span>
+    <span class="zyx-func">println</span><span class="zyx-types">(</span><span class="zyx-string">"Name: "</span> <span class="zyx-types">+</span> <span class="zyx-var">name</span><span class="zyx-types">)</span>
+    <span class="zyx-func">println</span><span class="zyx-types">(</span><span class="zyx-string">"Scores (Vargs): "</span> <span class="zyx-types">+</span> <span class="zyx-func">to_str</span><span class="zyx-types">(</span><span class="zyx-var">scores</span><span class="zyx-types">))</span>
+    <span class="zyx-func">println</span><span class="zyx-types">(</span><span class="zyx-string">"Details (Kwargs): "</span> <span class="zyx-types">+</span> <span class="zyx-func">to_str</span><span class="zyx-types">(</span><span class="zyx-var">details</span><span class="zyx-types">))</span>
+<span class="zyx-keyword">done</span>
+
+<span class="zyx-comment"># Call the function with multiple positional and keyword arguments</span>
+<span class="zyx-func">show_details</span><span class="zyx-types">(</span><span class="zyx-string">"Alice"</span><span class="zyx-types">,</span> <span class="zyx-number">95</span><span class="zyx-types">,</span> <span class="zyx-number">88</span><span class="zyx-types">,</span> <span class="zyx-number">100</span><span class="zyx-types">,</span> <span class="zyx-var">age</span><span class="zyx-types">=</span><span class="zyx-number">25</span><span class="zyx-types">,</span> <span class="zyx-var">city</span><span class="zyx-types">=</span><span class="zyx-string">"New York"</span><span class="zyx-types">)</span>
+
+<span class="zyx-comment"># Output:</span>
+<span class="zyx-comment"># Name: Alice</span>
+<span class="zyx-comment"># Scores (Vargs): [95, 88, 100]</span>
+<span class="zyx-comment"># Details (Kwargs): {"age": 25, "city": "New York"}</span>
+</code></pre>
+                </section>
+
+                <section id="ref-io">
+                    <h3>Input/Output</h3>
+                    <p>Basic console I/O is handled by built-in functions.</p>
+                    <ul>
+                        <li><code>println(value)</code>: Prints the value followed by a newline</li>
+                        <li><code>print(value)</code>: Prints the value without a newline</li>
+                        <li><code>input(prompt)</code>: Displays a prompt and returns the user's input as a string</li>
+                    </ul>
+                    <br>
+                    <pre><code class="highlight-Zerionyx"><span class="zyx-var">name</span> <span class="zyx-types">=</span> <span class="zyx-func">input</span><span class="zyx-types">(</span><span class="zyx-string">"Enter your name: "</span><span class="zyx-types">)</span>
+<span class="zyx-func">println</span><span class="zyx-types">(</span><span class="zyx-string">"Hello, "</span> <span class="zyx-types">+</span> <span class="zyx-var">name</span><span class="zyx-types">)</span>
+</code></pre>
+                </section>
+
+                <section id="ref-error-handling">
+                    <h3>Error Handling</h3>
+                    <p>Zerionyx uses a "panic" system for errors. Instead of traditional try-catch blocks, you can
+                        safely execute a function using the <code>is_panic</code> built-in. It returns a list indicating
+                        success or failure.</p>
+                    <br>
+                    <pre><code class="highlight-Zerionyx"><span class="zyx-keyword">defun</span> <span class="zyx-func-def">divide</span><span class="zyx-types">(</span><span class="zyx-var">a</span><span class="zyx-types">,</span> <span class="zyx-var">b</span><span class="zyx-types">)</span>
+    <span class="zyx-keyword">if</span> <span class="zyx-var">b</span> <span class="zyx-types">==</span> <span class="zyx-number">0</span> <span class="zyx-keyword">do</span>
+        <span class="zyx-func">panic</span><span class="zyx-types">(</span><span class="zyx-string">"Can't divide by zero!"</span><span class="zyx-types">,</span> <span class="zyx-string">"M"</span><span class="zyx-types">)</span> <span class="zyx-comment"># "M" for Math Error</span>
+    <span class="zyx-keyword">done</span>
+    <span class="zyx-keyword">return</span> <span class="zyx-var">a</span> <span class="zyx-types">/</span> <span class="zyx-var">b</span>
+<span class="zyx-keyword">done</span>
+
+<span class="zyx-var">result</span> <span class="zyx-types">=</span> <span class="zyx-func">is_panic</span><span class="zyx-types">(</span><span class="zyx-var">divide</span><span class="zyx-types">,</span> <span class="zyx-types">[</span><span class="zyx-number">10</span><span class="zyx-types">,</span> <span class="zyx-number">0</span><span class="zyx-types">])</span>
+<span class="zyx-var">value</span> <span class="zyx-types">=</span> <span class="zyx-var">result</span><span class="zyx-types">$</span><span class="zyx-number">0</span>      <span class="zyx-comment"># The result if successful</span>
+<span class="zyx-var">error_msg</span> <span class="zyx-types">=</span> <span class="zyx-var">result</span><span class="zyx-types">$</span><span class="zyx-number">1</span>  <span class="zyx-comment"># The error message if it failed</span>
+<span class="zyx-var">error_type</span> <span class="zyx-types">=</span> <span class="zyx-var">result</span><span class="zyx-types">$</span><span class="zyx-number">2</span> <span class="zyx-comment"># The error type (e.g., "M")</span>
+
+<span class="zyx-keyword">if</span> <span class="zyx-var">error_msg</span> <span class="zyx-types">!=</span> <span class="zyx-var">none</span> <span class="zyx-keyword">do</span>
+    <span class="zyx-func">println</span><span class="zyx-types">(</span><span class="zyx-string">"Error: "</span> <span class="zyx-types">+</span> <span class="zyx-var">error_msg</span><span class="zyx-types">)</span>
+<span class="zyx-keyword">else</span> <span class="zyx-keyword">do</span>
+    <span class="zyx-func">println</span><span class="zyx-types">(</span><span class="zyx-string">"Result: "</span> <span class="zyx-types">+</span> <span class="zyx-func">to_str</span><span class="zyx-types">(</span><span class="zyx-var">value</span><span class="zyx-types">))</span>
+<span class="zyx-keyword">done</span>
+<span class="zyx-comment"># Output: Error: Can't divide by zero!</span>
+</code></pre>
+                </section>
+
+                <section id="ref-file-handling">
+                    <h3>File Handling</h3>
+                    <p>File operations are managed through the <code>ffio</code> standard library.</p>
+                    <br>
+                    <pre><code class="highlight-Zerionyx"><span class="zyx-keyword">load</span> <span class="zyx-string">"libs.ffio"</span>
+
+<span class="zyx-var">filename</span> <span class="zyx-types">=</span> <span class="zyx-string">"greetings.txt"</span>
+<span class="zyx-var">content</span> <span class="zyx-types">=</span> <span class="zyx-string">"Hello from Zerionyx!"</span>
+
+<span class="zyx-comment"># Write to a file</span>
+<span class="zyx-var">ffio</span><span class="zyx-types">.</span><span class="zyx-func">write</span><span class="zyx-types">(</span><span class="zyx-var">filename</span><span class="zyx-types">,</span> <span class="zyx-string">"w"</span><span class="zyx-types">,</span> <span class="zyx-var">content</span><span class="zyx-types">)</span>
+
+<span class="zyx-comment"># Read from a file</span>
+<span class="zyx-var">read_content</span> <span class="zyx-types">=</span> <span class="zyx-var">ffio</span><span class="zyx-types">.</span><span class="zyx-func">read</span><span class="zyx-types">(</span><span class="zyx-var">filename</span><span class="zyx-types">,</span> <span class="zyx-string">"r"</span><span class="zyx-types">)</span>
+<span class="zyx-func">println</span><span class="zyx-types">(</span><span class="zyx-var">read_content</span><span class="zyx-types">)</span> <span class="zyx-comment"># Output: Hello from Zerionyx!</span>
+</code></pre>
+                </section>
+
+                <section id="ref-strings">
+                    <h3>Strings</h3>
+                    <p>Strings are immutable sequences of characters.</p>
+                    <ul>
+                        <li><b>Concatenation</b>: <code>"a" + "b"</code> results in <code>"ab"</code></li>
+                        <li><b>Repetition</b>: <code>"a" * 3</code> results in <code>"aaa"</code></li>
+                        <li><b>Indexing</b>: Use the <code>$</code> operator to get a character at a specific index
+                            <code>"hello"$1</code> results in <code>"e"</code>
+                        </li>
+                    </ul>
+                    <p>For more advanced functions like splitting, joining, and replacing, use the <code>string</code>
+                        library.</p>
+                </section>
+
+                <section id="ref-lists">
+                    <h3>Lists</h3>
+                    <p>Lists are mutable, ordered collections of items.</p>
+                    <ul>
+                        <li><b>Creation</b>: <code>my_list = [1, "a", true]</code></li>
+                        <li><b>Indexing</b>: <code>my_list$0</code> returns <code>1</code></li>
+                        <li><b>Appending</b>: <code>my_list + "new"</code> returns <code>[1, "a", true, "new"]</code>
+                        </li>
+                        <li><b>Concatenation</b>: <code>[1, 2] * [3, 4]</code> returns <code>[1, 2, 3, 4]</code></li>
+                        <li><b>Removal by index</b>: <code>[1, 2, 3] - 1</code> returns <code>[1, 3]</code></li>
+                    </ul>
+                    <p>The <code>listm</code> library provides functions like <code>map</code>, <code>filter</code>,
+                        <code>sort</code>, etc.
+                    </p>
+                </section>
+
+                <section id="ref-hashmaps">
+                    <h3>HashMaps</h3>
+                    <p>HashMaps store key-value pairs. Keys must be strings.</p>
+                    <ul>
+                        <li><b>Creation</b>: <code>person = {"name": "Alex", "age": 30}</code></li>
+                        <li><b>Accessing</b>: <code>person$"name"</code> returns <code>"Alex"</code></li>
+                        <li><b>Adding/Updating</b>: <code>person + {"city": "New York"}</code>, note that this returns a
+                            new map</li>
+                    </ul>
+                    <p>Use built-in functions like <code>keys(hm)</code>, <code>values(hm)</code>, and
+                        <code>has(hm, key)</code> for more operations.
+                    </p>
+                </section>
+
+                <section id="ref-assignment">
+                    <h3>Assignment to Lists and HashMaps</h3>
+                    <p>The <code>$</code> operator is not only used for accessing elements but also for assigning or
+                        updating values at a specific index in a list or a key in a HashMap.</p>
+                    <br>
+                    <h4>List Assignment</h4>
+                    <p>You can change the value at a specific index of a list.</p>
+                    <br>
+                    <pre><code class="highlight-Zerionyx"><span class="zyx-var">nums</span> <span class="zyx-types">=</span> <span class="zyx-types">[</span><span class="zyx-number">1</span><span class="zyx-types">,</span> <span class="zyx-number">2</span><span class="zyx-types">,</span> <span class="zyx-number">3</span><span class="zyx-types">,</span> <span class="zyx-number">4</span><span class="zyx-types">,</span> <span class="zyx-number">5</span><span class="zyx-types">]</span>
+<span class="zyx-var">nums</span><span class="zyx-types">$</span><span class="zyx-number">1</span> <span class="zyx-types">=</span> <span class="zyx-number">99</span> <span class="zyx-comment"># Update the value at index 1</span>
+<span class="zyx-func">println</span><span class="zyx-types">(</span><span class="zyx-var">nums</span><span class="zyx-types">)</span> <span class="zyx-comment"># Output: [1, 99, 3, 4, 5]</span>
+<span class="zyx-func">println</span><span class="zyx-types">(</span><span class="zyx-var">nums</span><span class="zyx-types">$</span><span class="zyx-number">1</span><span class="zyx-types">)</span> <span class="zyx-comment"># Output: 99</span>
+</code></pre>
+                    <br>
+                    <h4>HashMap Assignment</h4>
+                    <p>You can add a new key-value pair or update an existing one. This is particularly useful when
+                        building complex structures like a list of hashmaps.</p>
+                    <br>
+                    <pre><code class="highlight-Zerionyx"><span class="zyx-var">users</span> <span class="zyx-types">=</span> <span class="zyx-types">[]</span>
+<span class="zyx-func">append</span><span class="zyx-types">(</span><span class="zyx-var">users</span><span class="zyx-types">,</span> <span class="zyx-types">{})</span> <span class="zyx-comment"># Add an empty hashmap to the list</span>
+
+<span class="zyx-comment"># Assign values to the hashmap inside the list</span>
+<span class="zyx-var">users</span><span class="zyx-types">$</span><span class="zyx-number">0</span><span class="zyx-types">$</span><span class="zyx-string">"name"</span> <span class="zyx-types">=</span> <span class="zyx-string">"user-1"</span>
+<span class="zyx-var">users</span><span class="zyx-types">$</span><span class="zyx-number">0</span><span class="zyx-types">$</span><span class="zyx-string">"password"</span> <span class="zyx-types">=</span> <span class="zyx-string">"123456"</span>
+
+<span class="zyx-func">println</span><span class="zyx-types">(</span><span class="zyx-var">users</span><span class="zyx-types">)</span>
+<span class="zyx-func">println</span><span class="zyx-types">(</span><span class="zyx-var">users</span><span class="zyx-types">$</span><span class="zyx-number">0</span><span class="zyx-types">$</span><span class="zyx-string">"name"</span><span class="zyx-types">)</span>
+<span class="zyx-func">println</span><span class="zyx-types">(</span><span class="zyx-var">users</span><span class="zyx-types">$</span><span class="zyx-number">0</span><span class="zyx-types">$</span><span class="zyx-string">"password"</span><span class="zyx-types">)</span>
+</code></pre>
+                </section>
+
+                <section id="ref-bytes">
+                    <h3>Bytes</h3>
+                    <p>The <code>bytes</code> type represents an immutable sequence of bytes. It's essential for working
+                        with binary data, file I/O in binary mode, and cryptographic hashing.</p>
+                    <ul>
+                        <li><b>Creation</b>: Use the <code>to_bytes(value)</code> function</li>
+                        <li><b>From String</b>: <code>to_bytes("hello")</code></li>
+                        <li><b>From Hex</b>: <code>to_bytes("68656c6c6f", from_hex=true)</code></li>
+                        <li><b>Operations</b>: Supports concatenation (<code>+</code>) and indexing (<code>$</code>)
+                        </li>
+                    </ul>
+                    <pre><code class="highlight-Zerionyx"><span class="zyx-keyword">load</span> <span class="zyx-string">"libs.hash"</span>
+<span class="zyx-var">data</span> <span class="zyx-types">=</span> <span class="zyx-func">to_bytes</span><span class="zyx-types">(</span><span class="zyx-string">"my secret data"</span><span class="zyx-types">)</span>
+<span class="zyx-var">hashed_data</span> <span class="zyx-types">=</span> <span class="zyx-var">hash</span><span class="zyx-types">.</span><span class="zyx-func">sha256</span><span class="zyx-types">(</span><span class="zyx-var">data</span><span class="zyx-types">)</span>
+<span class="zyx-func">println</span><span class="zyx-types">(</span><span class="zyx-var">hashed_data</span><span class="zyx-types">)</span>
+</code></pre>
+                </section>
+
+                <section id="ref-cfloat">
+                    <h3>CFloat (Correct Float)</h3>
+                    <p>Due to the nature of binary floating-point arithmetic, simple operations like
+                        <code>0.1 + 0.2</code> can result in imprecise values (e.g., <code>0.30000000000000004</code>).
+                        The <code>cfloat</code> type avoids this by using a high-precision decimal representation.
+                    </p>
+                    <p>Use <code>to_cfloat(value)</code> to create a CFloat. They support all standard arithmetic
+                        operations.</p>
+                    <br>
+                    <pre><code class="highlight-Zerionyx"><span class="zyx-var">a</span> <span class="zyx-types">=</span> <span class="zyx-func">to_cfloat</span><span class="zyx-types">(</span><span class="zyx-string">"0.1"</span><span class="zyx-types">)</span>
+<span class="zyx-var">b</span> <span class="zyx-types">=</span> <span class="zyx-func">to_cfloat</span><span class="zyx-types">(</span><span class="zyx-string">"0.2"</span><span class="zyx-types">)</span>
+<span class="zyx-var">result</span> <span class="zyx-types">=</span> <span class="zyx-var">a</span> <span class="zyx-types">+</span> <span class="zyx-var">b</span>
+
+<span class="zyx-func">println</span><span class="zyx-types">(</span><span class="zyx-var">result</span><span class="zyx-types">)</span> <span class="zyx-comment"># Output: 0.3</span>
+</code></pre>
+                </section>
+                <section id="ref-zex">
+                    <h3>ZEX Executables (.zex)</h3>
+                    <p>
+                        The <b>ZEX (Zerionyx Executable)</b> is a bundled file format that allows you to distribute your
+                        programs as a single file.
+                        It compresses the source code, and supports
+                        bundling together with resource files (assets).
+                    </p>
+
+                    <h4>Packing</h4>
+                    <p>Use the <code>--pack</code> flag to create a <b>.zex</b> file from a main script and related
+                        files:</p>
+                    <br>
+                    <pre><code class="highlight-Zerionyx">python zerionyx.py --pack <span class="zyx-string">output.zex</span> <span class="zyx-var">main.zyx</span> <span class="zyx-comment">file1.txt file2.zyx</span></code></pre>
+                    <br>
+                    <h4>Running</h4>
+                    <p>You can execute a <b>.zex</b> file just like a regular <b>.zyx</b> file:</p>
+                    <br>
+                    <pre><code class="highlight-Zerionyx">python zerionyx.py <span class="zyx-string">output.zex</span></code></pre>
+                    <br>
+                    <h4>Technical Features</h4>
+                    <ul>
+                        <li><b>Portability</b>: Automatically extracts to a temporary directory and cleans up after
+                            execution.</li>
+                        <li><b>Resource Management</b>: Supports bundling additional configuration files, data, or
+                            sub-libraries.</li>
+                    </ul>
+
+                    <div class="note"
+                        style="border-left: 5px solid var(--neon-blue); padding: 10px; background: rgba(0, 255, 204, 0.1); margin-top: 15px;">
+                        <strong>💡 Pro Tip:</strong> When packing, the main script <b>must</b> be the first argument
+                        after the output filename so Zerionyx knows where to start the execution.
+                    </div>
+                </section>
+            </section>
+
+            <section id="standard-library">
+                <h2>Standard Library</h2>
+                <p>
+                    To use a library, add <code>load "libs.&lt;name&gt;"</code> at the top of your <b>.zyx</b> file.
+                    For example: <code>load "libs.math"</code>.
+                </p>
+
+                <p>
+                    The <code>load</code> statement works similarly to <code>#include</code> in C &mdash; it inserts the
+                    contents of the file directly into your code, without automatically applying any namespace.
+                </p>
+
+                <p>
+                    That means if you&rsquo;re loading your own library and want to keep things organized, you should
+                    manually
+                    wrap it in a namespace using the <code>namespace</code> keyword.
+                </p>
+
+                <p>
+                    All official libraries under <code>libs.*</code> are already wrapped in their own namespaces.
+                    That&rsquo;s why you can use them right away, like <code>math.is_prime(314)</code>.
+                </p>
+
+                <p>
+                    To load a library from your current directory instead of the built-in ones, use the
+                    <code>local.&lt;name&gt;</code> prefix.
+                    For example: <code>load "local.utils"</code> will include <code>utils.zyx</code> from the current
+                    folder.
+                </p>
+
+
+
+                <div id="lib-listm">
+                    <h3>listm.zyx</h3>
+                    <ul>
+                        <li><b>map(f, l)</b> &rarr; list &mdash; Apply function <code>f</code> to each element of list
+                            <code>l</code>
+                        </li>
+                        <li><b>filter(f, l)</b> &rarr; list &mdash; Filter list <code>l</code> by function
+                            <code>f</code> (keep
+                            elements where <code>f(x)</code> is true)
+                        </li>
+                        <li><b>reduce(f, l, i)</b> &rarr; any &mdash; Reduce list <code>l</code> with function
+                            <code>f</code> and
+                            initial value <code>i</code>
+                        </li>
+                        <li><b>min(l)</b> &rarr; number &mdash; Minimum value in list <code>l</code></li>
+                        <li><b>max(l)</b> &rarr; number &mdash; Maximum value in list <code>l</code></li>
+                        <li><b>reverse(l)</b> &rarr; list &mdash; Reverse the list <code>l</code></li>
+                        <li><b>zip(l1, l2)</b> &rarr; list &mdash; Pair elements from <code>l1</code> and
+                            <code>l2</code> (shortest
+                            length)
+                        </li>
+                        <li><b>zip_longest(l1, l2)</b> &rarr; list &mdash; Pair elements from <code>l1</code> and
+                            <code>l2</code>
+                            (fill with <code>none</code> if lengths differ)
+                        </li>
+                        <li><b>sort(l, reverse=false)</b> &rarr; list &mdash; Sort list <code>l</code></li>
+                        <li><b>count(l, v)</b> &rarr; number &mdash; Count occurrences of <code>v</code> in
+                            <code>l</code>
+                        </li>
+                        <li><b>index_of(l, v)</b> &rarr; number/none &mdash; Index of <code>v</code> in <code>l</code>
+                            or
+                            <code>none</code> if not found
+                        </li>
+                        <li><b>rand_int_list(len, min, max)</b> &rarr; list &mdash; List of random integers</li>
+                        <li><b>rand_float_list(len, min, max)</b> &rarr; list &mdash; List of random floats</li>
+                    </ul>
+                </div>
+                <div id="lib-string">
+                    <h3>string.zyx</h3>
+                    <ul>
+                        <li><b>split(s, sep="")</b> &rarr; list &mdash; Split string <code>s</code> by separator
+                            <code>sep</code>
+                        </li>
+                        <li><b>strip(s, sep=" ")</b> &rarr; list &mdash; Trims <code>sep</code> from both ends of
+                            <code>s</code>
+                        </li>
+                        <li><b>join(sep, l)</b> &rarr; str &mdash; Join list <code>l</code> with separator
+                            <code>sep</code>
+                        </li>
+                        <li><b>replace(s, old, new, c=-1)</b> &rarr; str &mdash; Replace <code>old</code> with
+                            <code>new</code> in
+                            <code>s</code>
+                        </li>
+                        <li><b>to_upper(s)</b> &rarr; str &mdash; Uppercase <code>s</code></li>
+                        <li><b>to_lower(s)</b> &rarr; str &mdash; Lowercase <code>s</code></li>
+                        <li><b>ord(s)</b> &rarr; number &mdash; Unicode code point of character <code>s</code></li>
+                        <li><b>chr(n)</b> &rarr; str &mdash; Character from code <code>n</code></li>
+                        <li><b>is_digit(s)</b> &rarr; bool &mdash; Is <code>s</code> a digit</li>
+                        <li><b>is_ascii_lowercase(s)</b> &rarr; bool &mdash; Is <code>s</code> a lowercase letter</li>
+                        <li><b>is_ascii_uppercase(s)</b> &rarr; bool &mdash; Is <code>s</code> an uppercase letter</li>
+                        <li><b>is_ascii_letter(s)</b> &rarr; bool &mdash; Is <code>s</code> a letter</li>
+                        <li><b>is_space(s)</b> &rarr; bool &mdash; Is <code>s</code> a whitespace character</li>
+                        <li><b>find(s, v)</b> &rarr; number/none &mdash; Index of substring <code>v</code> in
+                            <code>s</code>
+                        </li>
+                        <li><b>find_all(s, v)</b> &rarr; list &mdash; All indices of substring <code>v</code> in
+                            <code>s</code>
+                        </li>
+                        <li><b>startswith(s, v)</b> &rarr; bool &mdash; <code>s</code> starts with <code>v</code></li>
+                        <li><b>endswith(s, v)</b> &rarr; bool &mdash; <code>s</code> ends with <code>v</code></li>
+                        <li><b>encode(s, encoding="utf-8", errors="strict")</b> &rarr; <code>bytes</code> &mdash; Encode
+                            <code>s</code> using
+                            <code>encoding</code>
+                        </li>
+                        <li><b>decode(b, encoding="utf-8", errors="strict")</b> &rarr; <code>string</code> &mdash;
+                            Decode <code>b</code> using
+                            <code>encoding</code>
+                        </li>
+                        <li><b>format(s, *vargs)</b> &rarr; str &mdash; Creates a new formatted string by substituting
+                            placeholders like {} within a template with the provided list values</li>
+                    </ul>
+                </div>
+                <div id="lib-math">
+                    <h3>math.zyx</h3>
+                    <ul>
+                        <li><b>sqrt(a)</b> &rarr; number &mdash; Square root of <code>a</code></li>
+                        <li><b>abs(a)</b> &rarr; number &mdash; Absolute value of <code>a</code></li>
+                        <li><b>fact(n)</b> &rarr; number &mdash; Factorial of <code>n</code></li>
+                        <li><b>sin(x)</b> &rarr; number &mdash; Sine of <code>x</code></li>
+                        <li><b>cos(x)</b> &rarr; number &mdash; Cosine of <code>x</code></li>
+                        <li><b>tan(x)</b> &rarr; number &mdash; Tangent of <code>x</code></li>
+                        <li><b>gcd(a, b)</b> &rarr; number &mdash; GCD of <code>a</code> and <code>b</code></li>
+                        <li><b>lcm(a, b)</b> &rarr; number &mdash; LCM of <code>a</code> and <code>b</code></li>
+                        <li><b>fib(n)</b> &rarr; number &mdash; <code>n</code>-th Fibonacci number</li>
+                        <li><b>is_prime(n)</b> &rarr; bool &mdash; Is <code>n</code> prime</li>
+                        <li><b>deg2rad(d)</b> &rarr; number &mdash; Degrees to radians</li>
+                        <li><b>rad2deg(r)</b> &rarr; number &mdash; Radians to degrees</li>
+                        <li><b>exp(x)</b> &rarr; number &mdash; Exponential of <code>x</code></li>
+                        <li><b>log(x)</b> &rarr; number &mdash; Natural logarithm of <code>x</code></li>
+                        <li><b>sinh(x)</b> &rarr; number &mdash; Hyperbolic sine</li>
+                        <li><b>cosh(x)</b> &rarr; number &mdash; Hyperbolic cosine</li>
+                        <li><b>tanh(x)</b> &rarr; number &mdash; Hyperbolic tangent</li>
+                        <li><b>round(x)</b> &rarr; number &mdash; Round <code>x</code> to nearest integer</li>
+                        <li><b>is_close(a, b, rel_tol=1*10^(-9), abs_tol=0.0)</b> &rarr; bool &mdash; Compare two floats
+                            within a tolerance</li>
+                        <li>Constants: <b>PI</b>, <b>E</b>, <b>ln2</b></li>
+                    </ul>
+                </div>
+                <div id="lib-ffio">
+                    <h3>ffio.zyx</h3>
+                    <ul>
+                        <li><b>write(file, mode, text)</b> &rarr; none &mdash; Write <code>text</code> to
+                            <code>file</code> with
+                            mode <code>mode</code> ("w", "a" or "wb")
+                        </li>
+                        <li><b>read(file, mode)</b> &rarr; str/bytes &mdash; Read contents of <code>file</code> with
+                            mode
+                            <code>mode</code> ("r" or "rb")
+                        </li>
+                        <li><b>exists(file)</b> &rarr; bool &mdash; Check if <code>file</code> exists</li>
+                        <li><b>get_cdir()</b> &rarr; str &mdash; Get current directory</li>
+                        <li><b>set_cdir(dir)</b> &rarr; none &mdash; Change current directory</li>
+                        <li><b>list_dir(dir=".")</b> &rarr; list &mdash; List files in directory</li>
+                        <li><b>make_dir(dir)</b> &rarr; none &mdash; Create directory</li>
+                        <li><b>remove_file(file)</b> &rarr; none &mdash; Remove file</li>
+                        <li><b>rename(old, new)</b> &rarr; none &mdash; Rename file or directory</li>
+                        <li><b>remove_dir(dir)</b> &rarr; none &mdash; Remove directory</li>
+                        <li><b>copy(src, dst)</b> &rarr; none &mdash; Copy file</li>
+                        <li><b>is_file(file)</b> &rarr; bool &mdash; Is path a file</li>
+                        <li><b>abs_path(path)</b> &rarr; str &mdash; Get absolute path</li>
+                        <li><b>base_name(file)</b> &rarr; str &mdash; Get file name</li>
+                        <li><b>dir_name(file)</b> &rarr; str &mdash; Get parent folder</li>
+                        <li><b>symlink(src, dst)</b> &rarr; none &mdash; Create symbolic link from src to
+                            <code>dst</code>
+                        </li>
+                        <li><b>readlink(path)</b> &rarr; str &mdash; Read destination of a symbolic link</li>
+                        <li><b>stat(path)</b> &rarr; list &mdash; Get file or directory metadata (follow symlinks)</li>
+                        <li><b>lstat(path)</b> &rarr; list &mdash; Get file or directory metadata (don&rsquo;t follow
+                            symlinks)</li>
+                        <li><b>walk(top)</b> &rarr; list &mdash; Recursively walk through directory tree starting at
+                            <code>top</code>
+                        </li>
+                        <li><b>chmod(path, mode)</b> &rarr; none &mdash; Change permission bits of a file or directory
+                        </li>
+                        <li><b>chown(path, uid, gid)</b> &rarr; none &mdash; Change owner and group of a file or
+                            directory</li>
+                        <li><b>utime(path, times)</b> &rarr; none &mdash; Set access and modification times</li>
+                        <li><b>link(src, dst)</b> &rarr; none &mdash; Create a hard link from <code>src</code> to
+                            <code>dst</code>
+                        </li>
+                        <li><b>unlink(path)</b> &rarr; none &mdash; Remove a file or symbolic link</li>
+                        <li><b>access(path, mode)</b> &rarr; bool &mdash; Check user&rsquo;s access permissions for a
+                            path</li>
+                        <li><b>path_join(*vargs)</b> &rarr; str &mdash; Join multiple path components into one</li>
+                        <li><b>is_dir(path)</b> &rarr; bool &mdash; Check if the path is a directory</li>
+                        <li><b>is_link(path)</b> &rarr; bool &mdash; Check if the path is a symbolic link</li>
+                        <li><b>is_mount(path)</b> &rarr; bool &mdash; Check if the path is a mount point</li>
+                        <li>Constants: <b>os_sep</b></li>
+                    </ul>
+                </div>
+                <div id="lib-hash">
+                    <h3>hash.zyx</h3>
+                    <ul>
+                        <li><b>md5(s)</b> &rarr; bytes &mdash; MD5 hash of <code>s</code></li>
+                        <li><b>sha1(s)</b> &rarr; bytes &mdash; SHA1 hash of <code>s</code></li>
+                        <li><b>sha256(s)</b> &rarr; bytes &mdash; SHA256 hash of <code>s</code></li>
+                        <li><b>sha512(s)</b> &rarr; bytes &mdash; SHA512 hash of <code>s</code></li>
+                        <li><b>crc32(s)</b> &rarr; bytes &mdash; CRC32 hash of <code>s</code></li>
+                    </ul>
+                </div>
+                <div id="lib-memory">
+                    <h3>memory.zyx</h3>
+                    <ul>
+                        <li><b>remember(key, value)</b> &rarr; none &mdash; Store <code>value</code> with
+                            <code>key</code>
+                        </li>
+                        <li><b>recall(key)</b> &rarr; any/none &mdash; Retrieve value by <code>key</code></li>
+                        <li><b>forget(key)</b> &rarr; none &mdash; Remove <code>key</code> from memory</li>
+                        <li><b>clear_memory()</b> &rarr; none &mdash; Clear all memory</li>
+                        <li><b>keys()</b> &rarr; list &mdash; List all keys</li>
+                        <li><b>is_empty()</b> &rarr; bool &mdash; Is memory empty</li>
+                        <li><b>size()</b> &rarr; number &mdash; Number of keys</li>
+                    </ul>
+                </div>
+                <div id="lib-net">
+                    <h3>net.zyx</h3>
+                    <ul>
+                        <li><b>get_ip()</b> &rarr; str &mdash; Get public IP address</li>
+                        <li><b>get_mac()</b> &rarr; str &mdash; Get MAC address</li>
+                        <li><b>ping(host)</b> &rarr; str &mdash; Ping host</li>
+                        <li><b>downl(url, timeout=15)</b> &rarr; str &mdash; Download file from URL</li>
+                        <li><b>get_local_ip()</b> &rarr; str &mdash; Get local IP address</li>
+                        <li><b>get_hostname()</b> &rarr; str &mdash; Get hostname</li>
+                        <li><b>request(url, method="GET", headers={}, data={}, timeout=15)</b> &rarr; list/hashmap
+                            &mdash; Send HTTP
+                            request and
+                            return response JSON</li>
+                    </ul>
+                </div>
+                <div id="lib-random">
+                    <h3>random.zyx</h3>
+                    <ul>
+                        <li><b>rand()</b> &rarr; number (float) &mdash; Random float in [0, 1]</li>
+                        <li><b>rand_int(min, max)</b> &rarr; number (int) &mdash; Random integer in [min, max]</li>
+                        <li><b>rand_float(min, max)</b> &rarr; number (float) &mdash; Random float in [min, max]</li>
+                        <li><b>rand_choice(list)</b> &rarr; any &mdash; Random element from list</li>
+                        <li><b>int_seed(i)</b> &rarr; number (int) &mdash; Integer seed</li>
+                        <li><b>float_seed(f)</b> &rarr; number (float) &mdash; Float seed</li>
+                    </ul>
+                </div>
+                <div id="lib-sys">
+                    <h3>sys.zyx</h3>
+                    <ul>
+                        <li><b>system(cmd)</b> &rarr; none &mdash; Execute system command</li>
+                        <li><b>osystem(cmd)</b> &rarr; list &mdash; Same as <code>system</code> but returns its result
+                        </li>
+                        <li><b>get_env(name)</b> &rarr; str &mdash; Get environment variable</li>
+                        <li><b>set_env(name, value)</b> &rarr; none &mdash; Set environment variable</li>
+                        <li><b>exit(exit_code=0)</b> &rarr; none &mdash; Exit program</li>
+                        <li><b>argv</b> &mdash; List of command-line arguments</li>
+                        <li><b>os_name</b> &mdash; OS name</li>
+                    </ul>
+                </div>
+                <div id="lib-threading">
+                    <h3>threading.zyx</h3>
+                    <ul>
+                        <li><b>start(func, args=[], kwargs={})</b> &rarr; thread &mdash; Starts a new thread to execute
+                            <code>func</code>
+                        </li>
+                        <li><b>sleep(seconds)</b> &rarr; none &mdash; Pauses the current thread for a specified duration
+                        </li>
+                        <li><b>join(thread, timeout=15)</b> &rarr; none &mdash; Waits for a specific thread to complete
+                            its execution</li>
+                        <li><b>is_alive(thread)</b> &rarr; bool &mdash; Checks if a thread is still running</li>
+                        <li><b>cancel(thread)</b> &rarr; none &mdash; Attempts to terminate a running thread</li>
+                    </ul>
+
+                    <h4>Pool Namespace (<code>threading.pool</code>)</h4>
+                    <p>Provides a high-level interface for managing a pool of worker threads to execute tasks
+                        asynchronously.</p>
+                    <ul>
+                        <li><b>new(max_workers=5)</b> &rarr; thread-pool &mdash; Creates a new thread pool with a
+                            specified number of worker threads</li>
+                        <li><b>submit(pool, func, args=[], kwargs={})</b> &rarr; future &mdash; Submits a task
+                            (<code>func</code> with its arguments) to the thread pool for execution and returns a
+                            <code>future</code> object immediately
+                        </li>
+                        <li><b>shutdown(pool, wait=true)</b> &rarr; none &mdash; Shuts down the thread pool, releasing
+                            all resources, if <code>wait</code> is true, it will wait for all submitted tasks to
+                            complete</li>
+                        <li><b>result(future)</b> &rarr; any &mdash; Retrieves the result from a <code>future</code>
+                            object</li>
+                        <li><b>is_done(future)</b> &rarr; bool &mdash; Checks if the task associated with the
+                            <code>future</code> has completed, either successfully or with an error
+                        </li>
+                    </ul>
+                </div>
+                <div id="lib-time">
+                    <h3>time.zyx</h3>
+                    <ul>
+                        <li><b>sleep(seconds)</b> &rarr; none &mdash; Pauses execution for <code>seconds</code></li>
+                        <li><b>time()</b> &rarr; number (float) &mdash; Current time (seconds since epoch)</li>
+                        <li><b>ctime(time)</b> &rarr; str &mdash; Human-readable time string</li>
+                    </ul>
+                    <h4>datetime Namespace</h4>
+                    <p>A namespace for working with date and time objects.</p>
+                    <ul>
+                        <li><b>now()</b> &rarr; str &mdash; Returns the current local date and time</li>
+                        <li><b>today()</b> &rarr; str &mdash; Returns the current local date</li>
+                        <li><b>format(dt, fmt)</b> &rarr; str &mdash; Formats a datetime object <code>dt</code> into a
+                            string using <code>fmt</code></li>
+                        <li><b>parse(s, fmt)</b> &rarr; str &mdash; Parses a string <code>s</code> into a datetime
+                            object using format <code>fmt</code></li>
+                        <li><b>add_days(dt, days)</b> &rarr; str &mdash; Returns a new datetime object with
+                            <code>days</code> added
+                        </li>
+                        <li><b>diff(dt1, dt2)</b> &rarr; number &mdash; Returns the difference between two datetime
+                            objects</li>
+                    </ul>
+                </div>
+                <div id="lib-keyboard">
+                    <h3>keyboard.zyx</h3>
+                    <ul>
+                        <li><b>write(text)</b> &rarr; none &mdash; Type <code>text</code> as keyboard input</li>
+                        <li><b>press(key)</b> &rarr; none &mdash; Press a key</li>
+                        <li><b>release(key)</b> &rarr; none &mdash; Release a key</li>
+                        <li><b>wait(key)</b> &rarr; none &mdash; Wait for key press</li>
+                        <li><b>is_pressed(key)</b> &rarr; bool &mdash; Is key pressed</li>
+                    </ul>
+                </div>
+                <div id="lib-termcolor">
+                    <h3>termcolor.zyx</h3>
+                    <ul>
+                        <li><b>cprint(text, color=none, background=none, style=none)</b> &rarr; none &mdash; Prints
+                            <code>text</code>
+                            with color,
+                            background, and style with no newline
+                        </li>
+                        <li><b>cprintln(text, color=none, background=none, style=none)</b> &rarr; none &mdash; Same as
+                            <code>cprint</code> but adds a
+                            newline
+                        </li>
+                        <li><b>get_code(color=none, background=none, style=none)</b> &rarr; str &mdash; Return ANSI
+                            escape code string
+                            for the given
+                            color, background, and style</li>
+                    </ul>
+                </div>
+                <div id="lib-mouse">
+                    <h3>mouse.zyx</h3>
+                    <ul>
+                        <li><b>move(x, y)</b> &rarr; none &mdash; Moves the mouse cursor to position (<code>x</code>,
+                            <code>y</code>)
+                        </li>
+                        <li><b>click()</b> &rarr; none &mdash; Performs a left-click at the current mouse position</li>
+                        <li><b>right_click()</b> &rarr; none &mdash; Performs a right-click at the current mouse
+                            position</li>
+                        <li><b>scroll(amount)</b> &rarr; none &mdash; Scrolls vertically by <code>amount</code> units
+                        </li>
+                        <li><b>position()</b> &rarr; list &mdash; Returns the current mouse position as a list of two
+                            numbers</li>
+                    </ul>
+                </div>
+
+                <div id="lib-screen">
+                    <h3>screen.zyx</h3>
+                    <ul>
+                        <li><b>capture(path)</b> &rarr; none &mdash; Takes a screenshot of the entire screen and saves
+                            it to
+                            <code>path</code>
+                        </li>
+                        <li><b>capture_area(x, y, w, h, path)</b> &rarr; str &mdash; Captures a specific screen region
+                            starting at
+                            (<code>x</code>, <code>y</code>) with size <code>w</code> × <code>h</code> and saves it to
+                            <code>path</code>
+                        </li>
+                        <li><b>get_color(x, y)</b> &rarr; str &mdash; Returns the color at (<code>x</code>,
+                            <code>y</code>) as a
+                            hex string like <code>#rrggbb</code>
+                        </li>
+                    </ul>
+                </div>
+                <div id="lib-json">
+                    <h3>json.zyx</h3>
+                    <ul>
+                        <li><b>parse(o)</b> &rarr; str &mdash; Convert <code>o</code> to JSON string</li>
+                        <li><b>stringify(s)</b> &rarr; any &mdash; Parse JSON string <code>s</code> to Zerionyx object
+                        </li>
+                    </ul>
+                </div>
+
+                <div id="lib-decorators">
+                    <h3>decorators.zyx</h3>
+                    <ul>
+                        <li><b>cache(fn)</b> &rarr; func &mdash; Store results of function calls and return cached value
+                            for the same inputs</li>
+                        <li><b>once(fn)</b> &rarr; func &mdash; Ensure the function runs only once, subsequent calls
+                            return the first result</li>
+                        <li><b>retry(times)</b> &rarr; func &mdash; Retry a function up to <code>times</code> if it
+                            raises an error</li>
+                        <li><b>timeout(ms)</b> &rarr; func &mdash; Cancel function execution if it exceeds
+                            <code>ms</code> milliseconds
+                        </li>
+                        <li><b>log_call(fn)</b> &rarr; func &mdash; Print logs before and after calling the function
+                        </li>
+                        <li><b>measure_time(fn)</b> &rarr; func &mdash; Measure and print execution time (in ms)</li>
+                        <li><b>repeat(n)</b> &rarr; func &mdash; Execute a function <code>n</code> times and return
+                            the last result</li>
+                        <li><b>ignore_error(default=none)</b> &rarr; func &mdash; Ignore errors and return
+                            <code>default</code> if an exception occurs
+                        </li>
+                        <li><b>deprecated(msg)</b> &rarr; func &mdash; Print a warning when calling a deprecated
+                            function</li>
+                        <li><b>lazy(fn)</b> &rarr; func &mdash; Compute the value once and reuse it on subsequent calls
+                        </li>
+                    </ul>
+                </div>
+                <div id="lib-channel">
+                    <h3>channel.zyx</h3>
+                    <ul>
+                        <li><b>new()</b> &rarr; channel &mdash; Create a new channel</li>
+                        <li><b>send(ch, value)</b> &rarr; none &mdash; Send <code>value</code> into channel
+                            <code>ch</code>
+                        </li>
+                        <li><b>recv(ch)</b> &rarr; any &mdash; Receive a value from channel <code>ch</code> (blocks if
+                            empty)</li>
+                        <li><b>is_empty(ch)</b> &rarr; bool &mdash; Check if channel <code>ch</code> has no pending
+                            values</li>
+                    </ul>
+                </div>
+                <div id="lib-msgbox">
+                    <h3>msgbox.zyx</h3>
+                    <ul>
+                        <li><b>alert(message, title)</b> &rarr; none &mdash; Displays a simple alert box</li>
+                        <li><b>confirm(message, title, buttons=["OK", "Cancel"])</b> &rarr; str/none &mdash; Displays a
+                            confirmation dialog and returns the button clicked, or <code>none</code> if the dialog is
+                            closed</li>
+                        <li><b>prompt(message, title)</b> &rarr; str/none &mdash; Prompts for text input and returns the
+                            entered string or <code>none</code> if canceled</li>
+                        <li><b>password(message, title)</b> &rarr; str/none &mdash; Prompts for a masked password and
+                            returns the entered string or <code>none</code> if canceled</li>
+                    </ul>
+                </div>
+                <div id="lib-csv">
+                    <h3>csv.zyx</h3>
+                    <ul>
+                        <li><b>read(file_path)</b> &rarr; list &mdash; Read CSV file at <code>file_path</code> and
+                            return
+                            header-keyed hashmap of column lists</li>
+                        <li><b>write(file_path, data)</b> &rarr; none &mdash; Write <code>data</code> to CSV file at
+                            <code>file_path</code>
+                        </li>
+                    </ul>
+                </div>
+
+            </section>
+        </main>
+    </div>
+
+    <footer>
+        <div class="container">
+            Zerionyx © 2025 MemeViber &mdash; <a href="https://github.com/memeviber/Zerionyx"
+                target="_blank">View on
+                GitHub</a>
+        </div>
+    </footer>
+</body>
+
+
+
+</html>

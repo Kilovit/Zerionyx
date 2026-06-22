@@ -1,0 +1,175 @@
+# libs.decorators
+
+namespace decorators
+    load "libs.time"
+    load "libs.threading"
+    load "libs.json"
+
+    defun name(fn) -> slice(to_str(fn), 10, -1)
+
+    defun cache(fn)
+        cache_map = {}
+        defun wrapper(*args, **kwargs)
+            using parent cache_map
+            key = json.stringify([args, kwargs])
+            if has(cache_map, key) do
+                return cache_map$key
+            done
+            res = fn(*args, **kwargs)
+            cache_map$key = res
+            return res
+        done
+        return wrapper
+    done
+
+    defun once(fn)
+        has_run = false
+        result = none
+
+        defun wrapper(*vargs, **kargs)
+            using parent has_run
+            using parent result
+            if has_run do
+                return result
+            done
+            result = fn(*vargs, **kargs)
+            has_run = true
+            return result
+        done
+        return wrapper
+    done
+
+    defun retry(times)
+        defun decorator(fn)
+            defun wrapper(*vargs, **kargs)
+                for i = 1 to times + 1 do
+                    res = is_panic(fn, vargs)
+                    result = res$0
+                    err = res$1
+                    
+                    if is_none(err) do
+                        return result
+                    done
+                    
+                    println("Attempt " + to_str(i) + "/" + to_str(times) + " failed: " + err)
+                done
+                
+                panic("Function '" + name(fn) + "' failed after " + to_str(times) + " retries", "RT")
+            done
+            return wrapper
+        done
+        return decorator
+    done
+
+    defun timeout(ms)
+        defun decorator(fn)
+            defun wrapper(*vargs, **kargs)
+                state = {"result": none, "error": none, "done": false}
+
+                defun target()
+                    res = is_panic(fn, vargs)
+                    if res$1 do
+                        state$"error" = res$1
+                    else do
+                        state$"result" = res$0
+                    done
+                    state$"done" = true
+                done
+
+                t = threading.start(target)
+                threading.join(t, timeout=(ms / 1000.0))
+
+                if not state$"done" do
+                    panic("Function '" + name(fn) + "' timed out after " + to_str(ms) + "ms", "RT")
+                done
+                
+                if state$"error" do
+                    panic(state$"error", "RT")
+                done
+
+                return state$"result"
+            done
+            return wrapper
+        done
+        return decorator
+    done
+
+    defun log_call(fn)
+        defun wrapper(*vargs, **kargs)
+            println("--> Calling function '" + name(fn) + "'...")
+            result = fn(*vargs, **kargs)
+            println("<-- Function '" + name(fn) + "' returned.")
+            return result
+        done
+        return wrapper
+    done
+    
+    defun measure_time(fn)
+        defun wrapper(*vargs, **kargs)
+            start = time.time()
+            result = fn(*vargs, **kargs)
+            end = time.time()
+            duration = (end - start) * 1000
+            println("Execution time for '" + name(fn) + "': " + to_str(duration) + " ms")
+            return result
+        done
+        return wrapper
+    done
+
+    defun repeat(n)
+        defun decorator(fn)
+            defun wrapper(*vargs, **kargs)
+                last_result = none
+                for i = 1 to n + 1 do
+                    last_result = fn(*vargs, **kargs)
+                done
+                return last_result
+            done
+            return wrapper
+        done
+        return decorator
+    done
+
+    defun ignore_error(default=none)
+        defun decorator(fn)
+            defun wrapper(*vargs, **kargs)
+                res = is_panic(fn, vargs)
+                if res$1 do
+                    return default
+                done
+                return res$0
+            done
+            return wrapper
+        done
+        return decorator
+    done
+
+    defun deprecated(msg)
+        defun decorator(fn)
+            defun wrapper(*vargs, **kargs)
+                println("DEPRECATION WARNING: Function '" + name(fn) + "' is deprecated. " + msg)
+                return fn(*vargs, **kargs)
+            done
+            return wrapper
+        done
+        return decorator
+    done
+    
+    defun lazy(fn)
+        computed = false
+        value = none
+        
+        defun wrapper(*vargs, **kargs)
+            using parent computed
+            using parent value
+            if computed do
+                return value
+            done
+            
+            value = fn(*vargs, **kargs)
+            computed = true
+            return value
+        done
+        return wrapper
+    done
+done

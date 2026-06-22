@@ -1,0 +1,17 @@
+**/__pycache__/
+**/backup/
+**/node_modules/
+**/package-lock.json
+**/*.vsix
+**/pypy*/
+**/.venv/
+**/Zerionyx-*/
+**/*.zip
+**/*.tar.gz
+**/*.tar
+**/*.cast
+**/build/
+**/dist/
+**/LICENSE.txt
+**/*.spec
+**/*.exe

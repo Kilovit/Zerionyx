@@ -1,0 +1,34 @@
+# libs.memory
+
+memory_private_mem_36 = {}
+
+namespace memory
+    defun remember(k, v)
+        memory_private_mem_36$k = v
+    done
+
+    defun recall(k)
+        return get(memory_private_mem_36, k)
+    done
+
+    defun forget(k)
+        del_key(memory_private_mem_36, k)
+    done
+
+    defun clear_memory()
+        using memory_private_mem_36
+        memory_private_mem_36 = {}
+    done
+
+    defun keys()
+        return keys(memory_private_mem_36)
+    done
+
+    defun is_empty()
+        return len(memory_private_mem_36) == 0
+    done
+
+    defun size()
+        return len(memory_private_mem_36)
+    done
+done

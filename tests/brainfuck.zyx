@@ -1,0 +1,109 @@
+load "libs.sys"
+load "libs.string"
+load "libs.listm"
+
+defun pass() -> none
+
+defun brainfuck(nput)
+    if not is_str(nput) do
+        panic("'nput' must be a string", "T")
+    done
+    memory = [0]
+    pointer = 0
+    nput = string.split(nput, "")
+    output = ""
+    i = 0
+    while i < len(nput) do
+        c = nput$i
+        # println("i: " + to_str(i) + ", " + "c: " + to_str(c) + ", " + "memory: " + to_str(memory) + ", " + "pointer: " + to_str(pointer))
+        if (c) == ">" do
+            if pointer+1 >= 30000 do
+                println("Memory Error")
+                return
+            else do
+                if pointer+1 >= len(memory) do
+                    append(memory, 0)
+                done
+            done
+            pointer += 1
+        elif (c) == "<" do
+            if pointer > 0 do
+                pointer -= 1
+            done
+        elif (c) == "+" do
+            memory$pointer = ((memory$pointer) + 1) % 256
+        elif (c) == "-" do
+            memory$pointer = ((memory$pointer) - 1)  % 256
+        elif (c) == "." do
+            output = output + string.chr(memory$pointer)
+        elif (c) == "," do
+            _in = input("> ")
+            if len(_in) == 0 do
+                memory$pointer = 0
+            else do
+                memory$pointer = string.ord(_in$0)
+            done
+        elif (c) == "[" do
+            if (memory$pointer) == 0 do
+                count = 1
+                while count > 0 do
+                    i += 1
+                    c = nput$i
+                    if i >= len(nput) do
+                        println("Unmatched '['")
+                        return
+                    done
+                    if (c) == "[" do
+                        count += 1
+                    elif (c) == "]" do
+                        count -= 1
+                    done
+                done
+            done
+        elif (c) == "]" do
+            if (memory$pointer) != 0 do
+                count = 1
+                while count > 0 do
+                    i -= 1
+                    c = nput$i
+                    if i < 0 do
+                        println("Unmatched ']'")
+                        return
+                    done
+                    if (c) == "]" do
+                        count += 1
+                    elif (c) == "[" do
+                        count -= 1
+                    done
+                done
+            done
+        done
+        i += 1
+    done
+    return output
+done
+
+defun main()
+    println("Brainfuck Interpreter (type 'quit' to exit).")
+    while true do
+        code = input(">> ")
+        if string.strip(code, " ") == "quit" do
+            sys.exit(0)
+            return
+        done
+        output = brainfuck(code)
+        if is_none(output) do
+            continue
+        elif len(output) == 0 do
+            continue
+        elif output$(-1) != "\n" do
+            println(output)
+        else do
+            print(output)
+        done
+    done
+done
+
+if is_main do
+    main()
+done

@@ -1,0 +1,15 @@
+x = 2
+
+defun outer()
+    x = 0
+    defun inter()
+        using parent x
+        x += 1
+    done
+    println(x)
+    inter()
+    println(x)
+done
+
+outer()
+println(x)
