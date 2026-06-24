@@ -74,12 +74,12 @@ header {
     font-weight: bold;
     color: var(--light-text);
     text-decoration: none;
-    text-shadow: 0 0 5px var(--neon-blue);
+    /* text-shadow: 0 0 5px var(--neon-blue); */
 }
 
 .logo span {
     color: var(--neon-blue);
-    text-shadow: 0 0 8px var(--neon-blue);
+    /* text-shadow: 0 0 8px var(--neon-blue); */
 }
 
 nav a {
@@ -87,12 +87,12 @@ nav a {
     text-decoration: none;
     margin-left: 25px;
     font-size: 1.1rem;
-    transition: color 0.2s, text-shadow 0.2s;
+    /* transition: color 0.2s, text-shadow 0.2s; */
 }
 
 nav a:hover {
     color: var(--neon-blue);
-    text-shadow: 0 0 5px var(--neon-blue);
+    /* text-shadow: 0 0 5px var(--neon-blue); */
 }
 
 .hero {
@@ -117,7 +117,7 @@ nav a:hover {
     border: 1px solid var(--neon-blue);
     border-radius: 8px;
     text-align: left;
-    box-shadow: 0 0 10px var(--neon-blue);
+    /* box-shadow: 0 0 10px var(--neon-blue); */
     max-width: 700px;
     margin: 0 auto;
 }
@@ -153,25 +153,27 @@ pre {
 
 .btn {
     text-decoration: none;
-    color: var(--button-text-dark);
-    font-weight: bold;
-    padding: 0.8rem 2rem;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 0.7rem 3.5rem;
     border-radius: 5px;
-    transition: all 0.2s ease-in-out;
-    font-size: 1.1rem;
     border: none;
+    display: inline-block;
+    cursor: pointer;
+    box-shadow: none;
+    transition: background-color 0.15s ease;
 }
 
 .btn-primary {
     background: var(--neon-blue);
-    box-shadow: 0 0 10px var(--neon-blue);
+    color: var(--button-text-dark);
 }
 
 .btn-primary:hover {
-    box-shadow: 0 0 20px var(--neon-blue);
-    transform: translateY(-2px);
+    background: var(--neon-blue-dark);
 }
-
 
 .features {
     padding: 4rem 0;
@@ -198,7 +200,7 @@ pre {
 
 .feature-item h3 {
     color: var(--neon-blue-dark);
-    text-shadow: 0 0 3px var(--neon-blue-dark);
+    /* text-shadow: 0 0 3px var(--neon-blue-dark); */
     margin-top: 0;
 }
 
@@ -212,7 +214,7 @@ footer {
 
 footer a {
     color: var(--neon-blue);
-    text-shadow: 0 0 3px var(--neon-blue);
+    /* text-shadow: 0 0 3px var(--neon-blue); */
 }
 
 .highlight-Zerionyx .zyx-keyword,
