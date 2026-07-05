@@ -4849,7 +4849,7 @@ for method_name in [m for m in dir(BuiltInFunction) if m.startswith("execute_")]
         BUILTIN_FUNCTIONS.append(func_name)
 
 
-class Interpreter:
+class DebugState:
     def __init__(self):
         self.debug_mode = False
         self.breakpoints = set()
@@ -4858,6 +4858,16 @@ class Interpreter:
         self.step_over_depth = 0
         self.last_paused_line = -1
         self.last_paused_file = ""
+
+class Interpreter:
+    _shared_debug_state = None
+
+    def __init__(self):
+        if Interpreter._shared_debug_state is not None:
+            self.state = Interpreter._shared_debug_state
+        else:
+            self.state = DebugState()
+
         self.visit_table = {}
         for attr_name in dir(self):
             if attr_name.startswith("visit_") and attr_name != "visit":
@@ -4865,6 +4875,49 @@ class Interpreter:
                 if callable(method):
                     node_type = attr_name[len("visit_") :]
                     self.visit_table[node_type] = method
+
+    @property
+    def debug_mode(self):
+        return self.state.debug_mode
+
+    @debug_mode.setter
+    def debug_mode(self, val):
+        self.state.debug_mode = val
+        if val:
+            Interpreter._shared_debug_state = self.state
+        else:
+            if Interpreter._shared_debug_state is self.state:
+                Interpreter._shared_debug_state = None
+
+    @property
+    def breakpoints(self): return self.state.breakpoints
+    @breakpoints.setter
+    def breakpoints(self, val): self.state.breakpoints = val
+
+    @property
+    def step_into(self): return self.state.step_into
+    @step_into.setter
+    def step_into(self, val): self.state.step_into = val
+
+    @property
+    def step_over(self): return self.state.step_over
+    @step_over.setter
+    def step_over(self, val): self.state.step_over = val
+
+    @property
+    def step_over_depth(self): return self.state.step_over_depth
+    @step_over_depth.setter
+    def step_over_depth(self, val): self.state.step_over_depth = val
+
+    @property
+    def last_paused_line(self): return self.state.last_paused_line
+    @last_paused_line.setter
+    def last_paused_line(self, val): self.state.last_paused_line = val
+
+    @property
+    def last_paused_file(self): return self.state.last_paused_file
+    @last_paused_file.setter
+    def last_paused_file(self, val): self.state.last_paused_file = val
 
     def get_node_pos(self, node):
         if hasattr(node, "pos_start"):
@@ -5450,6 +5503,11 @@ class Interpreter:
 
         for i in range(start, end, step):
             context.symbol_table.set(var_name, Number(i))
+
+            if self.debug_mode:
+                self.last_paused_line = -1
+                self.last_paused_file = ""
+
             value = res.register(self.visit(node.body_node, context))
 
             if (
@@ -5500,6 +5558,10 @@ class Interpreter:
 
             if not condition.is_true():
                 break
+
+            if self.debug_mode:
+                self.last_paused_line = -1
+                self.last_paused_file = ""
 
             value = res.register(self.visit(body_node, context))
 
@@ -5764,6 +5826,9 @@ class Interpreter:
                     for i, var_name in enumerate(var_names):
                         context.symbol_table.set(var_name, values_to_unpack[i])
 
+                if self.debug_mode:
+                    self.last_paused_line = -1
+                    self.last_paused_file = ""
                 value = res.register(self.visit(body, context))
 
                 if (
