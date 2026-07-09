@@ -1,23 +1,9 @@
 MIT License
 
-WARNING: This project contains code adapted from multiple public sources.
-
-Some components are originally based on David Callanan's interpreter tutorial (2019),
-licensed under the MIT License. Other parts are believed to derive from Fus3n's version,
-which did not include an explicit license but was publicly shared for free use and modification.
-
-Only modifications made by MemeViber are explicitly claimed under copyright.
-Reasonable efforts have been made to trace original authors.
-If you are an original author and believe attribution or licensing is missing,
-please contact MemeViber.
-
-Credits:
-- David Callanan (2019, original author)
-- Fus3n (2022, based on David Callanan's version)
-- angelcaru (2024, modified David Callanan's version)
-- MemeViber (2025-2026, further modified Fus3n's version, with some code adapted from angelcaru's version)
-
-Copyright (c) 2019–2026
+Copyright (c) 2019 David Callanan
+Copyright (c) 2022 Fus3n
+Copyright (c) 2024 angelcaru
+Copyright (c) 2025-2026 MemeViber
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -36,3 +22,17 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+---
+
+ADDITIONAL NOTICE & CREDITS:
+
+This project contains code adapted from multiple public sources:
+- David Callanan (2019, original interpreter tutorial), licensed under the MIT License.
+- Fus3n (2022, based on David Callanan's version), publicly shared for free use and modification.
+- angelcaru (2024, modified David Callanan's version).
+- MemeViber (2025-2026, further modified Fus3n's version, with some code adapted from angelcaru's version).
+
+Only modifications made by MemeViber are explicitly claimed under MemeViber's copyright. 
+Reasonable efforts have been made to trace original authors. If you are an original author 
+and believe attribution or licensing is missing or incorrect, please contact MemeViber.
