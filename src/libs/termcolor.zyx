@@ -3,44 +3,35 @@
 namespace termcolor
     load "libs.string"
 
-    color_map = [
-        ['black', 30], ['red', 31], ['green', 32], ['yellow', 33],
-        ['blue', 34], ['magenta', 35], ['cyan', 36], ['white', 37]
-    ]
-    bg_map = [
-        ['on_black', 40], ['on_red', 41], ['on_green', 42], ['on_yellow', 43],
-        ['on_blue', 44], ['on_magenta', 45], ['on_cyan', 46], ['on_white', 47]
-    ]
-    style_map = [
-        ['bold', 1], ['underline', 4], ['reverse', 7]
-    ]
+    color_map = {
+        "black": 30, "red": 31, "green": 32, "yellow": 33,
+        "blue": 34, "magenta": 35, "cyan": 36, "white": 37
+    }
+    bg_map = {
+        "on_black": 40, "on_red": 41, "on_green": 42, "on_yellow": 43,
+        "on_blue": 44, "on_magenta": 45, "on_cyan": 46, "on_white": 47
+    }
+    style_map = {
+        "bold": 1, "underline": 4, "reverse": 7
+    }
 
     defun get_color(name)
-        for i = 0 to len(color_map) do
-            color = color_map$i
-            if color$0 == name do
-                return to_str(color$1)
-            done
+        if has(color_map, name) do
+            return to_str(color_map$name)
         done
         return ''
     done
 
     defun get_bg(name)
-        for i = 0 to len(bg_map) do
-            bg = bg_map$i
-            if bg$0 == name do
-                return to_str(bg$1)
-            done
+        if has(bg_map, name) do
+            return to_str(bg_map$name)
         done
         return ''
     done
 
     defun get_style(name)
-        for i = 0 to len(style_map) do
-            style = style_map$i
-            if style$0 == name do
-                return to_str(style$1)
-            done
+        if has(style_map, name) do
+            return to_str(style_map$name)
         done
         return ''
     done
