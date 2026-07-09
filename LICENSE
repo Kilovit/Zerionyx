@@ -1,9 +1,9 @@
 MIT License
 
 Copyright (c) 2019 David Callanan
-Copyright (c) 2022 Fus3n
+Copyright (c) 2021–2022 Fus3n
 Copyright (c) 2024 angelcaru
-Copyright (c) 2025-2026 MemeViber
+Copyright (c) 2025–2026 MemeViber
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -28,11 +28,17 @@ SOFTWARE.
 ADDITIONAL NOTICE & CREDITS:
 
 This project contains code adapted from multiple public sources:
-- David Callanan (2019, original interpreter tutorial), licensed under the MIT License.
-- Fus3n (2022, based on David Callanan's version), publicly shared for free use and modification.
-- angelcaru (2024, modified David Callanan's version).
-- MemeViber (2025-2026, further modified Fus3n's version, with some code adapted from angelcaru's version).
+
+- David Callanan (2019): Original interpreter tutorial, licensed under the MIT License.
+- Fus3n (2021-2022, "CupScript"): As stated by the author on r/Python, the codebase 
+  was built following David Callanan's tutorial with modifications. While the repository 
+  lacks an explicit license file, the author explicitly noted in the README: 
+  "you're free to try it out or use it if you can".
+- angelcaru (2024): Modified David Callanan's version.
+- MemeViber (2025–2026): Further modified and optimized Fus3n's version, incorporating 
+  components adapted from angelcaru's version.
 
 Only modifications made by MemeViber are explicitly claimed under MemeViber's copyright. 
-Reasonable efforts have been made to trace original authors. If you are an original author 
-and believe attribution or licensing is missing or incorrect, please contact MemeViber.
+Reasonable efforts have been made to maintain proper attribution and trace the project's 
+lineage. If you are one of the original authors and have questions or concerns regarding 
+this notice, please contact MemeViber.
